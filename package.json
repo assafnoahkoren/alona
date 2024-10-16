@@ -1,0 +1,12 @@
+{
+  "name": "alona",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "repository": "https://github.com/assafnoahkoren/alona",
+  "author": "Assaf Koren <assafnoahkoren@gmail.com>",
+  "license": "MIT"
+}
