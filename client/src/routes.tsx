@@ -5,6 +5,11 @@ import Settings from './components/Settings';
 import Login from './components/Login';
 import Signup from './components/Signup';
 
+const isAuthenticated = () => {
+  // Placeholder for authentication logic
+  return false; // Change this to actual authentication check
+};
+
 const AppRoutes = () => (
   <Routes>
     {/* Unauthenticated routes */}
@@ -12,9 +17,15 @@ const AppRoutes = () => (
     <Route path="/signup" element={<Signup />} />
 
     {/* Authenticated routes */}
-    <Route path="/" element={<Home />} />
-    <Route path="/profile" element={<Profile />} />
-    <Route path="/settings" element={<Settings />} />
+    {isAuthenticated() ? (
+      <>
+        <Route path="/" element={<Home />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/settings" element={<Settings />} />
+      </>
+    ) : (
+      <Route path="*" element={<Login />} />
+    )}
   </Routes>
 );
 
