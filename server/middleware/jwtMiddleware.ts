@@ -21,7 +21,7 @@ const jwtMiddleware = (req: Request, res: Response, next: NextFunction) => {
   }
 
   try {
-    const decoded = jwt.verify(token, 'your-secret-key') as DecodedJWT;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY as string) as DecodedJWT;
     req.decodedJwt = decoded;
     next();
   } catch (error) {
