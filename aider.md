@@ -20,9 +20,11 @@ Under unauthenticated we want to have the login and signup.
 Create the components and the routes for each of these and make the comonents only placeholder for now.
 
 # Steps:
-- [ ] Step 1
-- [ ] Step 2
-- [ ] Step 3
+- [ ] Install React Router v6
+- [ ] Set up BrowserRouter in the main entry file
+- [ ] Create placeholder components for Home, Profile, Settings, Login, and Signup
+- [ ] Define authenticated and unauthenticated routes
+- [ ] Implement routing logic for authentication
 
 
 
