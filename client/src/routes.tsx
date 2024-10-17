@@ -1,14 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
+import { isAuthenticated } from './auth';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
 import Login from './components/Login';
 import Signup from './components/Signup';
 
-const isAuthenticated = () => {
-  // Placeholder for authentication logic
-  return false; // Change this to actual authentication check
-};
 
 const AppRoutes = () => (
   <Routes>
