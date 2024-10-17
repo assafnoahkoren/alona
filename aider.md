@@ -19,9 +19,9 @@ We are woking on the server.
 Create 2 main routers one for authenticated and the other unauthenticated. make the routes for each of these with placeholder endpoints.
 
 # Steps:
-- [ ] Task 1
-- [ ] Task 2
-- [ ] Task 3
+- [ ] Create Authenticated Router
+- [ ] Create Unauthenticated Router
+- [ ] Integrate Routers
 
 
 
