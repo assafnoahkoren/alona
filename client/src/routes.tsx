@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import { isAuthenticated } from './auth';
+import { isAuthenticated } from './services/authService';
 import Home from './components/Home';
 import Profile from './components/Profile';
 import Settings from './components/Settings';
