@@ -4,7 +4,7 @@ This file will have 2 sections:
 3. The steps for the current task (Editable)
 
 # Prompt
-Look at this file "aider.md" and edit the task section to be the task we are working on (described in the task section).
+Look at this file "aider.md" and edit the Steps section to have the steps for the task we are working on.
 Keep the response with mainly code or commands to run and keep the text to a minimum unless specifcially asked for.
 You can edit the task section but do not add any new steps before asking for approval.
 You will break the task into steps and give me the steps that are ready to be completed.
@@ -19,6 +19,9 @@ We are woking on the server.
 Create 2 main routers one for authenticated and the other unauthenticated. make the routes for each of these with placeholder endpoints.
 
 # Steps:
+- [ ] Task 1
+- [ ] Task 2
+- [ ] Task 3
 
 
 
