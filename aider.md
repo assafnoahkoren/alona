@@ -9,6 +9,8 @@ You can edit the task section but do not add any new steps before asking for app
 You will break the task into steps and give me the steps that are ready to be completed.
 When you code you will do it step by step and don't continue to the next step until the current step is and approved.
 After the task is complete mark it as done in the steps section.
+End each message you send with the current step and the status of it. And also the next steps.
+Dont forget to edit the steps when the task is complete.
 
 
 # Task
