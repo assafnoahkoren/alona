@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import prisma from './db';
+import staticRouter from './staticRouter';
 import apiRouter from './apiRouter';
 
 const app = express();
@@ -31,6 +32,7 @@ app.get('/', async (req: Request, res: Response) => {
   });
 });
 
+app.use('/static', staticRouter);
 app.use('/api', apiRouter);
 
 // Start the server
