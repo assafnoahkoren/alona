@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import prisma from './db';
 import staticRouter from './staticRouter';
-import apiRouter from './apiRouter';
+import apiRouter from './routers/apiRouter';
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
