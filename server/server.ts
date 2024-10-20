@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import prisma from './db';
-import authenticatedRouter from './authenticatedRouter';
-import unauthenticatedRouter from './unauthenticatedRouter';
+import authenticatedRouter from './routers/authenticatedRouter';
+import unauthenticatedRouter from './routers/unauthenticatedRouter';
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
