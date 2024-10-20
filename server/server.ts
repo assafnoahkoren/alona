@@ -1,7 +1,6 @@
 import express, { Request, Response } from 'express';
 import prisma from './db';
-import authenticatedRouter from './routers/authenticatedRouter';
-import unauthenticatedRouter from './routers/unauthenticatedRouter';
+import apiRouter from './apiRouter';
 
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
@@ -32,8 +31,7 @@ app.get('/', async (req: Request, res: Response) => {
   });
 });
 
-app.use('/api/auth', authenticatedRouter);
-app.use('/api/public', unauthenticatedRouter);
+app.use('/api', apiRouter);
 
 // Start the server
 app.listen(port, () => {
