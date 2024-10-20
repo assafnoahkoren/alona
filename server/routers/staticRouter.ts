@@ -8,9 +8,22 @@ import { fileURLToPath } from 'url';
 const staticRouter = Router();
 
 // Serve static files from the 'static' directory
-staticRouter.use('/', (req, res) => {
+import fs from 'fs';
+
+staticRouter.use('/', (req, res, next) => {
   const filePath = path.join(__dirname, '../static', req.path);
-  res.sendFile(filePath);
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      next();
+    } else {
+      res.sendFile(filePath);
+    }
+  });
+});
+
+// Fallback to index.html for unmatched routes
+staticRouter.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../static', 'index.html'));
 });
 
 export default staticRouter;
