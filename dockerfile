@@ -8,7 +8,14 @@ WORKDIR /usr/src/app
 COPY . .
 
 
-# enter the server directory
+# Enter the client directory
+WORKDIR /usr/src/app/client
+
+# Install client dependencies and build the client
+RUN yarn install && yarn build
+
+# Copy the build output to the server's static directory
+RUN cp -r /usr/src/app/client/dist/* /usr/src/app/server/static/
 WORKDIR /usr/src/app/server
 
 # Install dependencies
