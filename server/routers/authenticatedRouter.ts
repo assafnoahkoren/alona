@@ -1,18 +1,99 @@
-import express from 'express';
+import express, { Request, Response } from "express";
+import prisma from "../db";
+import { RoomAllocator } from "../RoomAllocator";
 
 const authenticatedRouter = express.Router();
+export type Group = {
+  name: string,
+  rooms: number,
+}
 
-// Placeholder endpoints
-authenticatedRouter.get('/home', (req, res) => {
-  res.send('Home Page');
-});
+export type Residence = {
+  id: string,
+  name: string,
+  rooms: number,
+}
 
-authenticatedRouter.get('/profile', (req, res) => {
-  res.send('Profile Page');
-});
+export type AssignmentSettings = {
+  roomCapacity: number,
+}
 
-authenticatedRouter.get('/settings', (req, res) => {
-  res.send('Settings Page');
+type Reservation = {
+  id: string,
+  phoneNumber: string,
+  idNumber: string,
+  amount: number,
+  residenceId: string,
+  settlement: string,
+  link: string,
+  arrivedAt?: string,
+}
+
+
+export type GroupName = string;
+export type ResidenceName = string;
+export type Allocations = Record<GroupName, Record<ResidenceName, number>>;
+
+type Scenario = {
+  groups: Group[];
+  residences: Residence[];
+  persons_in_rooms: number;
+};
+
+const state = {
+  persons_in_rooms: 4,
+  groups: [] as Group[],
+  residences: [] as Residence[],
+  allocations: {} as Allocations,
+  reservations: {} as Record<string, Reservation>, // idNumber -> residence[]
+  allocationsLeft: {} as Allocations,
+}
+
+authenticatedRouter.post('/run-scenario', async (req: Request, res: Response) => {
+  const body: Scenario = req.body;
+  await prisma.algorithm_Run.updateMany({
+    where: {
+      Is_active: true,
+    },
+    data: {
+      Is_active: false,
+    },
+  });
+  const run = await prisma.algorithm_Run.create({
+    data: {
+      parameters: JSON.stringify(body),
+      Is_active: true,
+    },
+  });
+
+  const residences: Residence[] = body.residences.map((residence) => {
+    const [name, city] = residence.name?.split("-").map((s) => s.trim());
+    const id = residence.id || residence.name;
+    return {
+      id: id,
+      name: name,
+      rooms: residence.rooms,
+      city: city,
+      code: id,
+    };
+  });
+
+  const roomAllocator = new RoomAllocator(body.groups, residences);
+  roomAllocator.assignRooms();
+  const results = roomAllocator.getAssignmentsAsArray();
+
+  state.persons_in_rooms = body.persons_in_rooms || 4;
+  state.groups = body.groups;
+  state.residences = residences;
+  state.allocations = roomAllocator.assignments || {};
+  state.allocationsLeft = JSON.parse(JSON.stringify(state.allocations));
+  state.reservations = {};
+
+  res.json({
+    query: req.query,
+    body: body,
+    results: results,
+  });
 });
 
 export default authenticatedRouter;

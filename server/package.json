@@ -18,8 +18,10 @@
   },
   "dependencies": {
     "@prisma/client": "^5.20.0",
+    "body-parser": "^1.20.3",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
+    "millify": "^6.1.0",
     "typescript": "^5.6.3"
   }
 }

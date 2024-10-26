@@ -2,8 +2,12 @@ import { Router } from 'express';
 import authenticatedRouter from './authenticatedRouter';
 import unauthenticatedRouter from './unauthenticatedRouter';
 import prisma from '../db';
+import bodyParser from 'body-parser';
 
 const apiRouter = Router();
+
+apiRouter.use(bodyParser.json());
+
 apiRouter.get('/', async (req, res) => {
   const hotelsCount = await prisma.iDF_hotels.count();
   const settlementsCount = await prisma.iDF_Settlement.count();
