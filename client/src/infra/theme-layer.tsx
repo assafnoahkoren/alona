@@ -1,8 +1,10 @@
 import React from 'react';
-import { MantineProvider, createTheme } from '@mantine/core';
+import { DirectionProvider, MantineProvider, createTheme } from '@mantine/core';
+import '@mantine/core/styles.css';
+
 
 const theme = createTheme({
-  // You can customize your theme here
+  
 });
 
 interface ThemeLayerProps {
@@ -11,8 +13,10 @@ interface ThemeLayerProps {
 
 export const ThemeLayer: React.FC<ThemeLayerProps> = ({ children }) => {
   return (
-    <MantineProvider theme={theme}>
-      {children}
-    </MantineProvider>
+    <DirectionProvider initialDirection='rtl'>
+      <MantineProvider theme={theme} forceColorScheme='dark'>
+        {children}
+      </MantineProvider>
+    </DirectionProvider>
   );
 };

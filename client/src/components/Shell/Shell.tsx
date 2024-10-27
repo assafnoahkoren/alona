@@ -1,44 +1,34 @@
 import React from 'react';
-import { AppShell, Header, Navbar, Text, MediaQuery, Burger, useMantineTheme } from '@mantine/core';
+import { AppShell, Burger, Title, useMantineTheme } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
+import { useDisclosure } from '@mantine/hooks';
 
 export function Shell() {
   const theme = useMantineTheme();
-  const [opened, setOpened] = React.useState(false);
+  const [opened, { toggle }] = useDisclosure();
 
   return (
     <AppShell
-      styles={{
-        main: {
-          background: theme.colorScheme === 'dark' ? theme.colors.dark[8] : theme.colors.gray[0],
-        },
+      withBorder={false} 
+      header={{ height: 60 }}
+      navbar={{
+        width: 200,
+        breakpoint: 'none',
+        collapsed: { mobile: !opened },
       }}
-      navbarOffsetBreakpoint="sm"
-      asideOffsetBreakpoint="sm"
-      navbar={
-        <Navbar p="md" hiddenBreakpoint="sm" hidden={!opened} width={{ sm: 200, lg: 300 }}>
-          <Text>Application navbar</Text>
-        </Navbar>
-      }
-      header={
-        <Header height={{ base: 50, md: 70 }} p="md">
-          <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
-            <MediaQuery largerThan="sm" styles={{ display: 'none' }}>
-              <Burger
-                opened={opened}
-                onClick={() => setOpened((o) => !o)}
-                size="sm"
-                color={theme.colors.gray[6]}
-                mr="xl"
-              />
-            </MediaQuery>
-
-            <Text>Application header</Text>
-          </div>
-        </Header>
-      }
+      padding="md"
     >
-      <Outlet />
+      <AppShell.Header className='flex items-center justify-center' style={{ background: 'linear-gradient(to right, rgba(2,95,219,1) 0%, rgba(2,95,219,1) 35%, rgba(11,54,104,1) 100%)' }}>
+        <Title order={5}>מערכת שיבוץ מלונות</Title>
+      </AppShell.Header>
+
+      <AppShell.Navbar p="xs" >
+        
+      </AppShell.Navbar>
+
+      <AppShell.Main>
+        <Outlet />
+      </AppShell.Main>
     </AppShell>
   );
 }

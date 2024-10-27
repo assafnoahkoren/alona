@@ -1,7 +1,13 @@
+import { ThemeLayer } from './infra/theme-layer';
 import AppRoutes from './routes';
 
+
 function App() {
-  return <AppRoutes />;
+  return <>
+    <ThemeLayer>
+      <AppRoutes />
+    </ThemeLayer>
+  </>;
 }
 
 export default App;
