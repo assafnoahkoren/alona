@@ -14,7 +14,7 @@ interface ThemeLayerProps {
 export const ThemeLayer: React.FC<ThemeLayerProps> = ({ children }) => {
   return (
     <DirectionProvider initialDirection='rtl'>
-      <MantineProvider theme={theme} forceColorScheme='dark'>
+      <MantineProvider theme={theme} >
         {children}
       </MantineProvider>
     </DirectionProvider>
