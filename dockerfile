@@ -5,7 +5,10 @@ FROM node:20-alpine
 WORKDIR /usr/src/app
 
 # Copy the rest of the application code to the working directory
-COPY . .
+COPY ./client ./client
+COPY ./server ./server
+COPY ./package.json ./package.json
+COPY ./yarn.lock ./yarn.lock
 
 
 # Enter the client directory
