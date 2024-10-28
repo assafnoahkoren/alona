@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppShell, Divider, Group, Stack, Text, Title } from '@mantine/core';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { Squash as Hamburger } from 'hamburger-react'
 import { IconArchive, IconCar, IconDeviceFloppy, IconFilePlus, IconHome, IconLuggage, IconPlayerPlay } from '@tabler/icons-react';
 
@@ -28,16 +28,16 @@ export function Shell() {
           <Hamburger toggled={opened} toggle={setOpen} size={48} />
         </div>
         <Stack gap={0}>
-          <NavItem label='מסך בית' icon={<IconHome />} />
-          <NavItem isActive label='מעקב פינוי בפועל' icon={<IconPlayerPlay />} />
-          <NavItem label='יצירת תוכנית חדשה' icon={<IconFilePlus />} />
-          <NavItem label='טיוטות פרסום' icon={<IconDeviceFloppy />} />
-          <NavItem label='היסטוריה' icon={<IconArchive />} />
+          <NavItem label='מסך בית' icon={<IconHome />} url="/" />
+          <NavItem label='מעקב פינוי בפועל' icon={<IconPlayerPlay />} url="/tracking" />
+          <NavItem label='יצירת תוכנית חדשה' icon={<IconFilePlus />} url="/new-plan" />
+          <NavItem label='טיוטות פרסום' icon={<IconDeviceFloppy />} url="/drafts" />
+          <NavItem label='היסטוריה' icon={<IconArchive />} url="/history" />
           <Divider className='my-6' />
 
           <Title order={6} className='px-5'>מסכי שליטה</Title>
-          <NavItem label='הערכת חדרי מלון נדרשים לפינוי ' icon={<IconCar />} />
-          <NavItem label='בתי מלון ' icon={<IconLuggage />} />
+          <NavItem label='הערכת חדרי מלון נדרשים לפינוי ' icon={<IconCar />} url="/room-estimation" />
+          <NavItem label='בתי מלון ' icon={<IconLuggage />} url="/hotels" />
         </Stack>
       </AppShell.Navbar>
 
@@ -51,17 +51,22 @@ export function Shell() {
 type NavItemProps = {
   label: string,
   icon: React.ReactNode,
+  url: string,
   isActive?: boolean
 }
 const NavItem = (props: NavItemProps) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const isActive = location.pathname === props.url;
+  
   let itemClassName = 'color-[#687E97] p-[6px] cursor-pointer hover:bg-blue-100 hover:bg-opacity-50';
   let iconClassName = 'color-[#C3CFE7]';
-  if (props.isActive) {
+  if (isActive) {
     itemClassName = `${itemClassName} bg-blue-100 bg-opacity-50 text-white border-[2px] border-e-solid border-blue-500`;
     iconClassName = `${iconClassName} color-blue-600`;
   }
 
-  return <Group className={itemClassName} gap={8}>
+  return <Group className={itemClassName} gap={8} onClick={() => navigate(props.url)}>
     <div className={`flex-[1] flex items-center justify-end ${iconClassName}`}>
       {props.icon}
     </div>
