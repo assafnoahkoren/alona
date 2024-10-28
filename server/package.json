@@ -7,7 +7,8 @@
   "scripts": {
     "seed": "tsx prisma/seed.ts",
     "start": "tsx server.ts",
-    "dev": "tsx watch server.ts"
+    "dev": "tsx watch server.ts",
+    "generate": "prisma generate"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

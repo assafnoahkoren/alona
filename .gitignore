@@ -3,3 +3,4 @@
 volumes
 *.tar
 *.zip
+.env

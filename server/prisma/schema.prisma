@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["multiSchema"]
 }
 
@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Algorithm_Run {
-  ID          Int     @id @default(autoincrement())
+  ID          Int      @id @default(autoincrement())
   parameters  String?
   Is_active   Boolean?
   last_run_id Int?
@@ -20,18 +20,18 @@ model Algorithm_Run {
 }
 
 model Allocations {
-  ID            Int             @id @default(autoincrement())
-  Hotel_ID      String?         @db.UniqueIdentifier
-  Settelment_ID String?         @db.UniqueIdentifier
-  Rooms         String?         @db.UniqueIdentifier
-  
+  ID            Int     @id @default(autoincrement())
+  Hotel_ID      String? @db.UniqueIdentifier
+  Settelment_ID String? @db.UniqueIdentifier
+  Rooms         String? @db.UniqueIdentifier
+
   @@map("Allocations")
   @@schema("dbo")
 }
 
 model Rooms_SnapShot {
-  Hotel_ID        String  @id @db.UniqueIdentifier
-  room_type       String? @db.NVarChar(100)
+  Hotel_ID        String    @id @db.UniqueIdentifier
+  room_type       String?   @db.NVarChar(100)
   max_capacity    Int?
   is_pet_friendly Boolean?
   free_room_count Int?
@@ -42,16 +42,17 @@ model Rooms_SnapShot {
 }
 
 model IDF_Settlement {
-  Settlement_id   String  @id @default(dbgenerated()) @db.UniqueIdentifier
-  Name            String? @db.NVarChar(100)
-  Settlement_sign String? @db.NVarChar(100)
+  Settlement_id           String                    @id @default(dbgenerated()) @db.UniqueIdentifier
+  Name                    String?                   @db.NVarChar(100)
+  Settlement_sign         String?                   @db.NVarChar(100)
+  Settlements_To_Evacuate Settlements_To_Evacuate[]
 
   @@map("IDF_Settlement")
   @@schema("dbo")
 }
 
 model IDF_hotels {
-  Hotel_ID  String  @id @default(dbgenerated()) @db.UniqueIdentifier
+  Hotel_ID   String  @id @default(dbgenerated()) @db.UniqueIdentifier
   hotel_name String? @db.NVarChar(100)
   City       String? @db.NVarChar(100)
   ADDRESS    String? @db.NVarChar(100)
@@ -61,12 +62,12 @@ model IDF_hotels {
 }
 
 model IDF_Booking {
-  Booking_id    String   @id @default(dbgenerated()) @db.UniqueIdentifier
-  Hotel_ID      String   @db.UniqueIdentifier
-  Have_pets     Int
-  room_type     Int
-  Order_status  String?  @db.NVarChar(100)
-  Order_date    DateTime @db.DateTime
+  Booking_id   String   @id @default(dbgenerated()) @db.UniqueIdentifier
+  Hotel_ID     String   @db.UniqueIdentifier
+  Have_pets    Int
+  room_type    Int
+  Order_status String?  @db.NVarChar(100)
+  Order_date   DateTime @db.DateTime
 
   @@map("IDF_Booking")
   @@schema("dbo")
@@ -79,5 +80,16 @@ model IDF_Rooms {
   free_room_count Int
 
   @@map("IDF_Rooms")
+  @@schema("dbo")
+}
+
+model Settlements_To_Evacuate {
+  ID                          String  @id @default(dbgenerated()) @db.UniqueIdentifier
+  Settlement_ID               String @db.UniqueIdentifier
+  Settlement                  IDF_Settlement @relation(fields: [Settlement_ID], references: [Settlement_id])
+  Name                        String? @db.NVarChar(100)
+  rooms_needed                String? @db.NVarChar(100)
+
+  @@map("Settlements_To_Evacuate")
   @@schema("dbo")
 }

@@ -52,7 +52,6 @@ type NavItemProps = {
   label: string,
   icon: React.ReactNode,
   url: string,
-  isActive?: boolean
 }
 const NavItem = (props: NavItemProps) => {
   const navigate = useNavigate();
