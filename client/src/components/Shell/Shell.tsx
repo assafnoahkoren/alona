@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { AppShell, Divider, Group, Stack, Text, Title, useMantineTheme } from '@mantine/core';
+import { AppShell, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import { Outlet } from 'react-router-dom';
 import { Squash as Hamburger } from 'hamburger-react'
 import { IconArchive, IconCar, IconDeviceFloppy, IconFilePlus, IconHome, IconLuggage, IconPlayerPlay } from '@tabler/icons-react';
 
 export function Shell() {
-  const theme = useMantineTheme();
   const [opened, setOpen] = useState(false)
 
   return (

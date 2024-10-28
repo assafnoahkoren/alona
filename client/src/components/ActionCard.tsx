@@ -1,4 +1,4 @@
-import { Card, Group, Image, Text } from '@mantine/core';
+import { Card, Image, Text } from '@mantine/core';
 import { IconDots } from '@tabler/icons-react';
 import React from 'react';
 
