@@ -10,32 +10,39 @@ datasource db {
 }
 
 model Algorithm_Run {
-  ID          Int      @id @default(autoincrement())
-  parameters  String?
-  Is_active   Boolean?
-  last_run_id Int?
+  ID                      Int                       @id @default(autoincrement())
+  parameters              String?
+  Is_active               Boolean?
+  last_run_id             Int?
+  Settlements_To_Evacuate Settlements_To_Evacuate[]
+  Allocations             Allocations[]
+  Rooms_SnapShot          Rooms_SnapShot[]
 
   @@map("Algorithm_Run")
   @@schema("dbo")
 }
 
 model Allocations {
-  ID            Int     @id @default(autoincrement())
-  Hotel_ID      String? @db.UniqueIdentifier
-  Settelment_ID String? @db.UniqueIdentifier
-  Rooms         String? @db.UniqueIdentifier
+  ID            Int            @id @default(autoincrement())
+  Hotel_ID      String?        @db.UniqueIdentifier
+  Settelment_ID String?        @db.UniqueIdentifier
+  Rooms         String?        @db.UniqueIdentifier
+  run_id        Int?
+  Algorithm_Run Algorithm_Run? @relation(fields: [run_id], references: [ID])
 
   @@map("Allocations")
   @@schema("dbo")
 }
 
 model Rooms_SnapShot {
-  Hotel_ID        String    @id @db.UniqueIdentifier
-  room_type       String?   @db.NVarChar(100)
+  Hotel_ID        String         @id @db.UniqueIdentifier
+  room_type       String?        @db.NVarChar(100)
   max_capacity    Int?
   is_pet_friendly Boolean?
   free_room_count Int?
   datetime        DateTime?
+  run_id          Int?
+  Algorithm_Run   Algorithm_Run? @relation(fields: [run_id], references: [ID])
 
   @@map("Rooms_SnapShot")
   @@schema("dbo")
@@ -84,11 +91,13 @@ model IDF_Rooms {
 }
 
 model Settlements_To_Evacuate {
-  ID                          String  @id @default(dbgenerated()) @db.UniqueIdentifier
-  Settlement_ID               String @db.UniqueIdentifier
-  Settlement                  IDF_Settlement @relation(fields: [Settlement_ID], references: [Settlement_id])
-  Name                        String? @db.NVarChar(100)
-  rooms_needed                String? @db.NVarChar(100)
+  ID            String         @id @default(dbgenerated()) @db.UniqueIdentifier
+  Settlement_ID String         @db.UniqueIdentifier
+  Settlement    IDF_Settlement @relation(fields: [Settlement_ID], references: [Settlement_id])
+  Name          String?        @db.NVarChar(100)
+  rooms_needed  String?        @db.NVarChar(100)
+  run_id        Int?
+  Algorithm_Run Algorithm_Run? @relation(fields: [run_id], references: [ID])
 
   @@map("Settlements_To_Evacuate")
   @@schema("dbo")
