@@ -1,8 +1,88 @@
 import express, { Request, Response } from "express";
 import prisma from "../db";
 import { RoomAllocator } from "../RoomAllocator";
+import { Algorithm_Run, Allocations, IDF_hotels, IDF_Rooms, IDF_Settlement, Settlements_To_Evacuate } from "@prisma/client";
 
 const authenticatedRouter = express.Router();
+
+// Get all Settlements to Evacuate
+authenticatedRouter.get('/settlements-to-evacuate', async (_req: Request, res: Response<Settlements_To_Evacuate[]>) => {
+  try {
+    const settlements = await prisma.settlements_To_Evacuate.findMany({
+      include: {
+        Settlement: true,
+        Algorithm_Run: true
+      }
+    });
+    res.json(settlements);
+  } catch (error) {
+    res.status(500).json([]);
+  }
+});
+
+// Get all IDF Rooms
+authenticatedRouter.get('/idf-rooms', async (_req: Request, res: Response<IDF_Rooms[]>) => {
+  try {
+    const rooms = await prisma.iDF_Rooms.findMany();
+    res.json(rooms);
+  } catch (error) {
+    res.status(500).json([]);
+  }
+});
+
+// Get all IDF Hotels
+authenticatedRouter.get('/idf-hotels', async (_req: Request, res: Response<IDF_hotels[]>) => {
+  try {
+    const hotels = await prisma.iDF_hotels.findMany();
+    res.json(hotels);
+  } catch (error) {
+    res.status(500).json([]);
+  }
+});
+
+// Get all IDF Settlements
+authenticatedRouter.get('/idf-settlements', async (_req: Request, res: Response<IDF_Settlement[]>) => {
+  try {
+    const settlements = await prisma.iDF_Settlement.findMany({
+      include: {
+        Settlements_To_Evacuate: true
+      }
+    });
+    res.json(settlements);
+  } catch (error) {
+    res.status(500).json([]);
+  }
+});
+
+// Get all Allocations
+authenticatedRouter.get('/allocations', async (_req: Request, res: Response<Allocations[]>) => {
+  try {
+    const allocations = await prisma.allocations.findMany({
+      include: {
+        Algorithm_Run: true
+      }
+    });
+    res.json(allocations);
+  } catch (error) {
+    res.status(500).json([]);
+  }
+});
+
+// Get all Algorithm Runs
+authenticatedRouter.get('/algorithm-runs', async (_req: Request, res: Response<Algorithm_Run[]>) => {
+  try {
+    const runs = await prisma.algorithm_Run.findMany({
+      include: {
+        Settlements_To_Evacuate: true,
+        Allocations: true,
+        Rooms_SnapShot: true
+      }
+    });
+    res.json(runs);
+  } catch (error) {
+    res.status(500).json([]);
+  }
+});
 export type Group = {
   name: string,
   rooms: number,
