@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { staticDataStore } from '../stores/static-data-store';
 import { observer } from 'mobx-react-lite';
-import { Button, Card, Group, Stack, Text, Title } from '@mantine/core';
+import { Button, Card, Group, Stack, Text, Title, Tooltip } from '@mantine/core';
 import { IconHome, IconBuilding, IconPlus } from '@tabler/icons-react';
 
 const NewPlan = () => {
@@ -29,7 +29,9 @@ const NewPlan = () => {
             <Card key={settlement.Settlement_id} shadow="sm" padding="lg" radius="md" withBorder maw={200}>
               <Group wrap='nowrap'>
                 <IconHome size={24} color="#4C6EF5" />
-                <Text fw={500} className="truncate max-w-[120px]">{settlement.Name}</Text>
+                <Tooltip label={settlement.Name} multiline>
+                  <Text fw={500} className="truncate max-w-[120px]">{settlement.Name}</Text>
+                </Tooltip>
               </Group>
               <Text size="sm" c="dimmed">
                 מספר חדרים נדרשים: {settlement.Settlements_To_Evacuate[0]?.rooms_needed || 'לא ידוע'}
@@ -49,7 +51,9 @@ const NewPlan = () => {
             <Card key={hotel.Hotel_ID} shadow="sm" padding="lg" radius="md" withBorder maw={200}>
               <Group wrap='nowrap'>
                 <IconBuilding size={24} color="#4C6EF5" />
-                <Text fw={500} className="truncate max-w-[120px]">{hotel.hotel_name}</Text>
+                <Tooltip label={hotel.hotel_name} multiline>
+                  <Text fw={500} className="truncate max-w-[120px]">{hotel.hotel_name}</Text>
+                </Tooltip>
               </Group>
               <Text size="sm" c="dimmed">
                 מספר חדרים זמינים: {hotel.rooms.length}
