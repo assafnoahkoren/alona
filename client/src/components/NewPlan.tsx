@@ -1,5 +1,4 @@
 const NewPlan = () => {
-
   return <div>NewPlan</div>;
 };
 
