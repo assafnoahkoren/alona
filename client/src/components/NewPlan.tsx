@@ -3,7 +3,10 @@ import { staticDataStore } from '../stores/static-data-store';
 
 const NewPlan = () => {
   useEffect(() => {
-    staticDataStore.fetchData();
+    staticDataStore.fetchData().then(() => {
+      console.log(staticDataStore.settlemenentToEvacuate);
+      console.log(staticDataStore.hotelsWithRooms);
+    });
   }, []);
   return <div>NewPlan</div>;
 };

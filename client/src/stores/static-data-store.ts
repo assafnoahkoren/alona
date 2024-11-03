@@ -30,6 +30,14 @@ export class StaticDataStore {
             });
         }
     }
+
+    get settlemenentToEvacuate() {
+        return this.settlements.filter(settlement => settlement.Settlements_To_Evacuate.length > 0);
+    }
+
+    get hotelsWithRooms() {
+        return this.hotels.filter(hotel => hotel.rooms.length > 0);
+    }
 }
 
 export const staticDataStore = new StaticDataStore();
