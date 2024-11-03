@@ -17,7 +17,7 @@ export function Shell() {
         breakpoint: 'none',
         collapsed: { mobile: !opened },
       }}
-      padding="md"
+      padding="0"
     >
       <AppShell.Header className='flex items-center justify-center color-white' style={{ background: 'linear-gradient(to right, rgba(2,95,219,1) 0%, rgba(2,95,219,1) 35%, rgba(11,54,104,1) 100%)' }}>
         <Title order={5}>מערכת שיבוץ מלונות</Title>
@@ -41,7 +41,7 @@ export function Shell() {
         </Stack>
       </AppShell.Navbar>
 
-      <AppShell.Main>
+      <AppShell.Main className='flex'>
         <Outlet />
       </AppShell.Main>
     </AppShell>
