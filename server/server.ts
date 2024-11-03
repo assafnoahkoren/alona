@@ -8,8 +8,8 @@ const port = process.env.SERVER_PORT || 3000;
 // Define a simple route
 
 
-app.use('/', staticRouter);
 app.use('/api', apiRouter);
+app.use('/', staticRouter);
 
 // Start the server
 app.listen(port, () => {

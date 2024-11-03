@@ -1,16 +1,16 @@
 import express, { Request, Response } from "express";
 import prisma from "../../db";
-import { Settlements_To_Evacuate } from "@prisma/client";
+import { IDF_Settlement } from "@prisma/client";
 
 const router = express.Router();
 
-router.get('/', async (_req: Request, res: Response<Settlements_To_Evacuate[]>) => {
+router.get('/', async (_req: Request, res: Response<IDF_Settlement[]>) => {
   try {
-    const settlements = await prisma.settlements_To_Evacuate.findMany({
+    const settlements = await prisma.iDF_Settlement.findMany({
       include: {
-        Settlement: true,
-        Algorithm_Run: true
+        Settlements_To_Evacuate: true
       }
+      
     });
     res.json(settlements);
   } catch (error) {

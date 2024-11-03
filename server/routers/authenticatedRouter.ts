@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 import prisma from "../db";
 import { RoomAllocator } from "../RoomAllocator";
-import settlementRoutes from './models/settlementRoutes';
+import settlementRoutes from './models/settlementToEvacuateRoutes';
 import roomRoutes from './models/roomRoutes';
 import hotelRoutes from './models/hotelRoutes';
-import idfSettlementRoutes from './models/idfSettlementRoutes';
+import idfSettlementRoutes from './models/settlementRoutes';
 import allocationRoutes from './models/allocationRoutes';
 import algorithmRunRoutes from './models/algorithmRunRoutes';
 
@@ -12,9 +12,9 @@ const authenticatedRouter = express.Router();
 
 // Mount the routes
 authenticatedRouter.use('/settlements-to-evacuate', settlementRoutes);
-authenticatedRouter.use('/idf-rooms', roomRoutes);
-authenticatedRouter.use('/idf-hotels', hotelRoutes);
-authenticatedRouter.use('/idf-settlements', idfSettlementRoutes);
+authenticatedRouter.use('/rooms', roomRoutes);
+authenticatedRouter.use('/hotels', hotelRoutes);
+authenticatedRouter.use('/settlements', idfSettlementRoutes);
 authenticatedRouter.use('/allocations', allocationRoutes);
 authenticatedRouter.use('/algorithm-runs', algorithmRunRoutes);
 export type Group = {

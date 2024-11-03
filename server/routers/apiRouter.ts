@@ -7,7 +7,8 @@ import bodyParser from 'body-parser';
 const apiRouter = Router();
 
 apiRouter.use(bodyParser.json());
-
+apiRouter.use('/auth', authenticatedRouter);
+apiRouter.use('/public', unauthenticatedRouter);
 apiRouter.get('/', async (req, res) => {
   const hotelsCount = await prisma.iDF_hotels.count();
   const settlementsCount = await prisma.iDF_Settlement.count();
@@ -35,7 +36,5 @@ apiRouter.get('/', async (req, res) => {
 
 
 
-apiRouter.use('/auth', authenticatedRouter);
-apiRouter.use('/public', unauthenticatedRouter);
 
 export default apiRouter;
