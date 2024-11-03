@@ -27,7 +27,7 @@ const NewPlan = () => {
         <Group>
           {staticDataStore.settlemenentToEvacuate.map((settlement) => (
             <Card key={settlement.Settlement_id} shadow="sm" padding="lg" radius="md" withBorder maw={200}>
-              <Group>
+              <Group wrap='nowrap'>
                 <IconHome size={24} color="#4C6EF5" />
                 <Text fw={500} className="truncate max-w-[120px]">{settlement.Name}</Text>
               </Group>
@@ -47,7 +47,7 @@ const NewPlan = () => {
         <Group>
           {staticDataStore.hotelsWithRooms.map((hotel) => (
             <Card key={hotel.Hotel_ID} shadow="sm" padding="lg" radius="md" withBorder maw={200}>
-              <Group>
+              <Group wrap='nowrap'>
                 <IconBuilding size={24} color="#4C6EF5" />
                 <Text fw={500} className="truncate max-w-[120px]">{hotel.hotel_name}</Text>
               </Group>
