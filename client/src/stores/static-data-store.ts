@@ -39,7 +39,7 @@ export class StaticDataStore {
     }
 
     get hotelsWithRooms() {
-        return this.hotels.filter(hotel => hotel.rooms.length > 0);
+        return this.hotels.filter(hotel => hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0) > 0);
     }
 }
 
