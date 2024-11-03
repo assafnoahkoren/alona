@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { staticDataStore } from '../stores/static-data-store';
 import { observer } from 'mobx-react-lite';
-import { Card, Group, Stack, Text, Title } from '@mantine/core';
+import { Button, Card, Group, Stack, Text, Title } from '@mantine/core';
 import { IconHome, IconBuilding } from '@tabler/icons-react';
 
 const NewPlan = () => {
@@ -20,7 +20,10 @@ const NewPlan = () => {
   return (
     <Stack gap="xl">
       <Stack>
-        <Title order={3}>ישובים לפינוי</Title>
+        <Group justify="space-between">
+          <Title order={3}>ישובים לפינוי</Title>
+          <Button>הוסף</Button>
+        </Group>
         <Group>
           {staticDataStore.settlemenentToEvacuate.map((settlement) => (
             <Card key={settlement.Settlement_id} shadow="sm" padding="lg" radius="md" withBorder>
@@ -37,7 +40,10 @@ const NewPlan = () => {
       </Stack>
 
       <Stack>
-        <Title order={3}>יעדי פינוי</Title>
+        <Group justify="space-between">
+          <Title order={3}>יעדי פינוי</Title>
+          <Button>הוסף</Button>
+        </Group>
         <Group>
           {staticDataStore.hotelsWithRooms.map((hotel) => (
             <Card key={hotel.Hotel_ID} shadow="sm" padding="lg" radius="md" withBorder>
