@@ -18,4 +18,19 @@ router.get('/', async (_req: Request, res: Response<IDF_Settlement[]>) => {
   }
 });
 
+router.post('/', async (req: Request<{}, {}, CreateSettlementToEvacuateDto>, res: Response) => {
+  try {
+    const newSettlement = await prisma.settlements_To_Evacuate.create({
+      data: req.body,
+      include: {
+        Settlement: true,
+        Algorithm_Run: true
+      }
+    });
+    res.status(201).json(newSettlement);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create settlement to evacuate' });
+  }
+});
+
 export default router;
