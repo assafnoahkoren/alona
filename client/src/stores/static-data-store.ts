@@ -1,8 +1,11 @@
 import { makeAutoObservable, runInAction } from 'mobx';
 import apiService from '../services/apiService';
+import { EnrichedHotel } from '../../../server/routers/models/hotelRoutes';
+import { EnrichedSettlement } from '../../../server/routers/models/settlementRoutes';
+
 export class StaticDataStore {
-    hotels: any[] = [];
-    settlements: any[] = [];
+    hotels: EnrichedHotel[] = [];
+    settlements: EnrichedSettlement[] = [];
     isLoading = false;
     error: string | null = null;
 

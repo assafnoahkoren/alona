@@ -22,7 +22,7 @@ const NewPlan = () => {
         <Title order={3}>ישובים לפינוי</Title>
         <Group>
           {staticDataStore.settlemenentToEvacuate.map((settlement) => (
-            <Card key={settlement.Settlement_ID} shadow="sm" padding="lg" radius="md" withBorder>
+            <Card key={settlement.Settlement_id} shadow="sm" padding="lg" radius="md" withBorder>
               <Text fw={500}>{settlement.Name}</Text>
               <Text size="sm" c="dimmed">
                 מספר חדרים נדרשים: {settlement.Settlements_To_Evacuate[0]?.rooms_needed || 'לא ידוע'}
@@ -37,7 +37,7 @@ const NewPlan = () => {
         <Group>
           {staticDataStore.hotelsWithRooms.map((hotel) => (
             <Card key={hotel.Hotel_ID} shadow="sm" padding="lg" radius="md" withBorder>
-              <Text fw={500}>{hotel.Name}</Text>
+              <Text fw={500}>{hotel.hotel_name}</Text>
               <Text size="sm" c="dimmed">
                 מספר חדרים זמינים: {hotel.rooms.length}
               </Text>

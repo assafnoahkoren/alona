@@ -1,21 +1,21 @@
 import express, { Request, Response } from "express";
 import prisma from "../../db";
-import { IDF_Settlement } from "@prisma/client";
-import { SettlementToEvacuate } from "../../../client/src/services/settlementService";
+import { IDF_Settlement, Settlements_To_Evacuate } from "@prisma/client";
+
 
 const router = express.Router();
-export interface EnrichSettlement extends IDF_Settlement {
-  Settlements_To_Evacuate: SettlementToEvacuate[];
+export interface EnrichedSettlement extends IDF_Settlement {
+  Settlements_To_Evacuate: Settlements_To_Evacuate[];
 }
 
-router.get('/', async (_req: Request, res: Response<EnrichSettlement[]>) => {
+router.get('/', async (_req: Request, res: Response<EnrichedSettlement[]>) => {
   try {
     const settlements = await prisma.iDF_Settlement.findMany({
       include: {
         Settlements_To_Evacuate: true
       }
     });
-    res.json(settlements as EnrichSettlement[]);
+    res.json(settlements as EnrichedSettlement[]);
   } catch (error) {
     res.status(500).json([]);
   }
