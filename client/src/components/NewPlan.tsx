@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { staticDataStore } from '../stores/static-data-store';
 import { observer } from 'mobx-react-lite';
 import { Card, Group, Stack, Text, Title } from '@mantine/core';
+import { IconHome, IconBuilding } from '@tabler/icons-react';
 
 const NewPlan = () => {
   useEffect(() => {
@@ -23,7 +24,10 @@ const NewPlan = () => {
         <Group>
           {staticDataStore.settlemenentToEvacuate.map((settlement) => (
             <Card key={settlement.Settlement_id} shadow="sm" padding="lg" radius="md" withBorder>
-              <Text fw={500}>{settlement.Name}</Text>
+              <Group>
+                <IconHome size={24} color="#4C6EF5" />
+                <Text fw={500}>{settlement.Name}</Text>
+              </Group>
               <Text size="sm" c="dimmed">
                 מספר חדרים נדרשים: {settlement.Settlements_To_Evacuate[0]?.rooms_needed || 'לא ידוע'}
               </Text>
@@ -37,7 +41,10 @@ const NewPlan = () => {
         <Group>
           {staticDataStore.hotelsWithRooms.map((hotel) => (
             <Card key={hotel.Hotel_ID} shadow="sm" padding="lg" radius="md" withBorder>
-              <Text fw={500}>{hotel.hotel_name}</Text>
+              <Group>
+                <IconBuilding size={24} color="#4C6EF5" />
+                <Text fw={500}>{hotel.hotel_name}</Text>
+              </Group>
               <Text size="sm" c="dimmed">
                 מספר חדרים זמינים: {hotel.rooms.length}
               </Text>
