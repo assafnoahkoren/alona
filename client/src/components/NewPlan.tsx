@@ -20,9 +20,9 @@ const NewPlan = () => {
   return (
     <Stack gap="xl">
       <Stack>
-        <Group justify="space-between">
+        <Group>
           <Title order={3}>ישובים לפינוי</Title>
-          <Button leftSection={<IconPlus size={16} />}>הוסף</Button>
+          <Button variant="subtle" size='sm' leftSection={<IconPlus size={16} />}>הוסף</Button>
         </Group>
         <Group>
           {staticDataStore.settlemenentToEvacuate.map((settlement) => (
@@ -40,9 +40,9 @@ const NewPlan = () => {
       </Stack>
 
       <Stack>
-        <Group justify="space-between">
+        <Group>
           <Title order={3}>יעדי פינוי</Title>
-          <Button leftSection={<IconPlus size={16} />}>הוסף</Button>
+          <Button variant="subtle" size='sm' leftSection={<IconPlus size={16} />}>הוסף</Button>
         </Group>
         <Group>
           {staticDataStore.hotelsWithRooms.map((hotel) => (
