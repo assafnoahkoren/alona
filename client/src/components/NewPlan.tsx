@@ -3,6 +3,7 @@ import { staticDataStore } from '../stores/static-data-store';
 import { observer } from 'mobx-react-lite';
 import { Button, Card, Group, Stack, Text, Title, Tooltip } from '@mantine/core';
 import { IconHome, IconBuilding, IconPlus, IconAccessible, IconUser, IconUsersGroup, IconWheelchair, IconDisabled, IconRun, IconCpu, IconBrain, IconReload } from '@tabler/icons-react';
+import { evacPlanStore } from '../stores/evac-plan-store';
 
 const NewPlan = () => {
   useEffect(() => {
@@ -26,7 +27,7 @@ const NewPlan = () => {
             <Button variant="subtle" size='sm' leftSection={<IconPlus size={16} />}>הוסף</Button>
           </Group>
           <Group>
-            {staticDataStore.settlemenentToEvacuate.map((settlement) => (
+            {staticDataStore.settlementsToEvacuate.map((settlement) => (
               <Card key={settlement.Settlement_id} shadow="sm" padding="lg" radius="md" withBorder w={280}>
                 <Group wrap='nowrap'>
                   <IconHome size={24} color="#4C6EF5" />
@@ -56,7 +57,7 @@ const NewPlan = () => {
                     <Text fw={500} className="truncate max-w-[200px]">{hotel.hotel_name}</Text>
                   </Tooltip>
                 </Group>
-                <Text size="sm" c="dimmed">
+                <Text  size="sm" c="dimmed">
                   <u>חדרים זמינים: {hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0)}</u>
                   {hotel.rooms.map((room) => (
                     <Group key={room.Room_ID} wrap='nowrap' align='center' justify='flex-start' gap={4}>
@@ -70,7 +71,7 @@ const NewPlan = () => {
         </Stack>
       </Stack>
       <Group className='bg-blue-200 p-4' justify='center'>
-        <Button px={40} variant='white' leftSection={<IconReload size={20}/>}>צור תכנית פינוי</Button>
+        <Button px={40} variant='white' leftSection={<IconReload size={20}/>} onClick={() => evacPlanStore.createEvacPlan()}>צור תכנית פינוי</Button>
       </Group>
     </Stack>
   );

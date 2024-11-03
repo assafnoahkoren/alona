@@ -34,7 +34,7 @@ export class StaticDataStore {
         }
     }
 
-    get settlemenentToEvacuate() {
+    get settlementsToEvacuate() {
         return this.settlements.filter(settlement => settlement.Settlements_To_Evacuate.length > 0);
     }
 
