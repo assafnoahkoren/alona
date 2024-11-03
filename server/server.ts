@@ -1,14 +1,23 @@
-import express, { Request, Response } from 'express';
-import swaggerUi from 'swagger-ui-express';
-import { specs } from './swagger';
+import express from 'express';
 import staticRouter from './routers/staticRouter';
 import apiRouter from './routers/apiRouter';
-
+import morgan from 'morgan';
 const app = express();
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 const port = process.env.SERVER_PORT || 3000;
 
-// Define a simple route
+// Use morgan middleware for logging
+app.use(morgan('combined'));
+
+// CORS middleware
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 
 app.use('/api', apiRouter);
