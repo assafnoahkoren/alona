@@ -6,6 +6,7 @@ import Profile from './components/Profile';
 import Settings from './components/Settings';
 import Login from './components/Login';
 import Signup from './components/Signup';
+import NewPlan from './components/NewPlan';
 
 const AppRoutes = () => (
   <Routes>
@@ -20,6 +21,7 @@ const AppRoutes = () => (
       <Route path="/" element={<Home />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/new-plan" element={<NewPlan />} />
     </Route>
 
     {/* Catch-all route */}
