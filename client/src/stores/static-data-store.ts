@@ -1,7 +1,5 @@
 import { makeAutoObservable, runInAction } from 'mobx';
-import { hotelService } from '../services/hotelService';
-import { settlementService } from '../services/settlementService';
-
+import apiService from '../services/apiService';
 export class StaticDataStore {
     hotels: any[] = [];
     settlements: any[] = [];
@@ -10,20 +8,19 @@ export class StaticDataStore {
 
     constructor() {
         makeAutoObservable(this);
-        this.fetchData();
     }
 
-    private async fetchData() {
+    public async fetchData() {
         try {
             this.isLoading = true;
             const [hotelsResponse, settlementsResponse] = await Promise.all([
-                hotelService.getAll(),
-                settlementService.getAll()
+                apiService.hotels.getAll(),
+                apiService.settlements.getAll()
             ]);
 
             runInAction(() => {
-                this.hotels = hotelsResponse.data;
-                this.settlements = settlementsResponse.data;
+                this.hotels = hotelsResponse;
+                this.settlements = settlementsResponse;
                 this.isLoading = false;
             });
         } catch (error) {
