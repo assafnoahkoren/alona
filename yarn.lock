@@ -2645,6 +2645,11 @@ mlly@^1.4.2, mlly@^1.7.1, mlly@^1.7.2:
     pkg-types "^1.2.0"
     ufo "^1.5.4"
 
+mobx@^6.13.5:
+  version "6.13.5"
+  resolved "https://registry.yarnpkg.com/mobx/-/mobx-6.13.5.tgz#957d9df88c7f8b4baa7c6f8bdcb6d68b432a6ed5"
+  integrity sha512-/HTWzW2s8J1Gqt+WmUj5Y0mddZk+LInejADc79NJadrWla3rHzmRHki/mnEUH1AvOmbNTZ1BRbKxr8DSgfdjMA==
+
 morgan@^1.10.0:
   version "1.10.0"
   resolved "https://registry.yarnpkg.com/morgan/-/morgan-1.10.0.tgz#091778abc1fc47cd3509824653dae1faab6b17d7"
