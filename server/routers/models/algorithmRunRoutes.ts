@@ -44,6 +44,7 @@ router.post('/', async (req: Request<{}, {}, CreateAlgorithmRunDto>, res: Respon
       hotels: parameters.hotels || [],
       settlements: parameters.settlement || [],
       personsInRooms: 4,
+      algorithmRun: newRun,
     });
     res.status(201).json({
       algorithmRun: newRun,

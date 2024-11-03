@@ -24,9 +24,9 @@ model Algorithm_Run {
 
 model Allocations {
   ID            Int            @id @default(autoincrement())
-  Hotel_ID      String?        @db.UniqueIdentifier
-  Settelment_ID String?        @db.UniqueIdentifier
-  Rooms         String?        @db.UniqueIdentifier
+  Hotel_ID      String?        
+  Settelment_ID String?        
+  Rooms         String?        
   run_id        Int?
   Algorithm_Run Algorithm_Run? @relation(fields: [run_id], references: [ID])
 

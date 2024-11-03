@@ -1,11 +1,13 @@
-import { IDF_Rooms } from "@prisma/client";
+import { Algorithm_Run, IDF_Rooms } from "@prisma/client";
 import { EnrichedHotel } from "../routers/models/hotelRoutes";
 import { EnrichedSettlement } from "../routers/models/settlementRoutes";
+import prisma from "../db";
 
 export interface AlgorithmInput {
   hotels: EnrichedHotel[];
   settlements: EnrichedSettlement[];
   personsInRooms: number;
+  algorithmRun: Algorithm_Run;
 }
 
 type HotelID_RoomType_Key = `${string}-${string}`;
@@ -65,6 +67,22 @@ const algorithmService = {
         });
       });
     }
+    
+    Object.keys(allocations).forEach((settlementID: SettlementID) => {
+      Object.keys(allocations[settlementID]).forEach((hotelRoomIdTypeKey: any) => {
+        allocations[settlementID][hotelRoomIdTypeKey].forEach(async (room: IDF_Rooms) => {
+          await prisma.allocations.create({
+            data: {
+
+              Hotel_ID: room.Hotel_ID,
+              Settelment_ID: settlementID,
+              Rooms: room.free_room_count.toString(),
+              run_id: input.algorithmRun.ID,
+            }
+          })
+        });
+      });
+    });
 
     return {
       allocations,
