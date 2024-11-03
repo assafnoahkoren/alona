@@ -19,16 +19,57 @@ export interface AlgorithmOutput {
 
 const algorithmService = {
   runAllocation: async (input: AlgorithmInput): Promise<AlgorithmOutput> => {
+    const startTime = Date.now();
+    
+    // Get initial available rooms
     const availableRooms = getRooms(input.hotels);
-    const availableRoomsByHotel = groupRoomsByHotel(availableRooms);
+    let availableRoomsByHotel = groupRoomsByHotel(availableRooms);
+    
+    // Get settlements' needed rooms
     const neededRooms = input.settlements.map((settlement) => ({
       settlementID: settlement.Settlement_id,
-      rooms: settlement.Settlements_To_Evacuate[0].rooms_needed,
+      rooms: parseInt(settlement.Settlements_To_Evacuate[0].rooms_needed || "0"),
     }));
+
+    const allocations: Record<SettlementID, RoomsByHotel> = {};
+
+    // Allocate rooms for each settlement
+    for (const { settlementID, rooms: neededRoomCount } of neededRooms) {
+      allocations[settlementID] = {};
+      let remainingNeeded = neededRoomCount;
+
+      // Try to allocate from each available hotel-room combination
+      Object.entries(availableRoomsByHotel).forEach(([hotelRoomKey, rooms]) => {
+        if (remainingNeeded <= 0) return;
+
+        rooms.forEach(room => {
+          if (remainingNeeded <= 0 || room.free_room_count <= 0) return;
+
+          // Calculate rooms to allocate
+          const roomsToAllocate = Math.min(room.free_room_count, remainingNeeded);
+
+          // Create allocation
+          if (!allocations[settlementID][hotelRoomKey]) {
+            allocations[settlementID][hotelRoomKey] = [];
+          }
+
+          // Add allocated rooms
+          allocations[settlementID][hotelRoomKey].push({
+            ...room,
+            free_room_count: roomsToAllocate
+          });
+
+          // Update remaining counts
+          room.free_room_count -= roomsToAllocate;
+          remainingNeeded -= roomsToAllocate;
+        });
+      });
+    }
+
     return {
-      allocations: {},
+      allocations,
       unallocated: availableRoomsByHotel,
-      duration: 0,
+      duration: Date.now() - startTime
     };
   },
 };
