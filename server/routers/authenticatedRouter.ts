@@ -73,7 +73,7 @@ authenticatedRouter.post('/run-scenario', async (req: Request, res: Response) =>
       Is_active: false,
     },
   });
-  const run = await prisma.algorithm_Run.create({
+   await prisma.algorithm_Run.create({
     data: {
       parameters: JSON.stringify(body),
       Is_active: true,
