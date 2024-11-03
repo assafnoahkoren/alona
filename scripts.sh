@@ -1,0 +1,1 @@
+docker run --env-file server/.env -p 8888:8888 alona-server:latest
