@@ -38,6 +38,10 @@ export class StaticDataStore {
         return this.settlements.filter(settlement => settlement.Settlements_To_Evacuate.length > 0);
     }
 
+    get settlementsNotToEvacuate() {
+        return this.settlements.filter(settlement => !settlement.Settlements_To_Evacuate || settlement.Settlements_To_Evacuate.length === 0);
+    }
+
     get hotelsWithRooms() {
         return this.hotels.filter(hotel => hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0) > 0);
     }

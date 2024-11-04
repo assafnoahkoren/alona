@@ -1,6 +1,7 @@
 import React from 'react';
 import { DirectionProvider, MantineProvider, createTheme } from '@mantine/core';
 import '@mantine/core/styles.css';
+import { ModalsProvider } from '@mantine/modals';
 
 
 const theme = createTheme({
@@ -15,7 +16,9 @@ export const ThemeLayer: React.FC<ThemeLayerProps> = ({ children }) => {
   return (
     <DirectionProvider initialDirection='rtl'>
       <MantineProvider theme={theme} >
-        {children}
+        <ModalsProvider>
+          {children}
+        </ModalsProvider>
       </MantineProvider>
     </DirectionProvider>
   );
