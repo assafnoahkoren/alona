@@ -172,7 +172,6 @@ const SelectSettlementToEvacuate = ({onClose}: {onClose: () => void}) => {
   };
 
   return <form onSubmit={form.onSubmit(handleSubmit)}>
-    <LoadingOverlay visible={loading}/>
     <Select
         label="יישוב"
         placeholder="בחירת יישוב"
@@ -189,7 +188,7 @@ const SelectSettlementToEvacuate = ({onClose}: {onClose: () => void}) => {
         {...form.getInputProps('numberOfRooms')}
     />
 
-    <Button type="submit" mt="sm">
+    <Button type="submit" mt="sm" loading={loading}>
       הוספה
     </Button>
   </form>;
