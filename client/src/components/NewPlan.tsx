@@ -35,6 +35,7 @@ import { modals } from '@mantine/modals';
 import settlementService from '../services/settlementService.ts';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
+import settlementToEvacuateService from '../services/settlementToEvacuateService.ts';
 
 const NewPlan = () => {
   const [createSettlementModalOpened, { open: openCreateSettlementModal, close: closeCreateSettlementModal}] = useDisclosure(false);
@@ -63,7 +64,10 @@ const NewPlan = () => {
           </Text>
       ),
       labels: { confirm: 'הסרה', cancel: 'ביטול' },
-      onConfirm: () => settlementService.remove(settlementId),
+      onConfirm: async () => {
+        await settlementToEvacuateService.delete(settlementId);
+        await staticDataStore.fetchData();
+      },
     });
   }
 
@@ -88,7 +92,7 @@ const NewPlan = () => {
                       <Text fw={500} className="truncate max-w-[120px]">{settlement.Name}</Text>
                     </Tooltip>
                   </Group>
-                  <ActionIcon variant="outline" color="red" radius="xl" aria-label="delete" size="xs" onClick={() => removeSettlement(settlement.Settlement_id)}>
+                  <ActionIcon variant="outline" color="red" radius="xl" aria-label="delete" size="xs" onClick={() => removeSettlement(settlement.Settlements_To_Evacuate[0].ID)}>
                     <IconX />
                   </ActionIcon>
                 </Group>
@@ -164,10 +168,14 @@ const SelectSettlementToEvacuate = ({onClose}: {onClose: () => void}) => {
 
   const handleSubmit = (values) => {
     setLoading(true);
-    settlementService.create(values.settlement, values.numberOfRooms).then(() => {
+    settlementToEvacuateService.create({
+      Settlement_ID: values.settlement,
+      rooms_needed: values.numberOfRooms,
+    }).then(() => {
       onClose();
     }).finally(() => {
       setLoading(false);
+      staticDataStore.fetchData();
     });
   };
 

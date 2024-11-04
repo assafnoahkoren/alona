@@ -10,11 +10,15 @@ export interface CreateSettlementToEvacuateDto {
 
 const settlementToEvacuateService = {
   getAll: async () => {
-    const response = await axios.get(`${BASE_URL}/settlements-to-evacuate`);
+    const response = await axios.get(`${BASE_URL}/auth/settlements-to-evacuate`);
     return response.data;
   },
   create: async (data: CreateSettlementToEvacuateDto) => {
-    const response = await axios.post(`${BASE_URL}/settlements-to-evacuate`, data);
+    const response = await axios.post(`${BASE_URL}/auth/settlements-to-evacuate`, data);
+    return response.data;
+  },
+  delete: async (id: string) => {
+    const response = await axios.delete(`${BASE_URL}/auth/settlements-to-evacuate/${id}`);
     return response.data;
   }
 };
