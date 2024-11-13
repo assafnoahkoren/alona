@@ -24,9 +24,9 @@ model Algorithm_Run {
 
 model Allocations {
   ID            Int            @id @default(autoincrement())
-  Hotel_ID      String?        
-  Settelment_ID String?        
-  Rooms         String?        
+  Hotel_ID      String?
+  Settelment_ID String?
+  Rooms         String?
   run_id        Int?
   Algorithm_Run Algorithm_Run? @relation(fields: [run_id], references: [ID])
 
@@ -100,5 +100,45 @@ model Settlements_To_Evacuate {
   Algorithm_Run Algorithm_Run? @relation(fields: [run_id], references: [ID])
 
   @@map("Settlements_To_Evacuate")
+  @@schema("dbo")
+}
+
+model TBL_evacuation_data {
+  Merhav                                                           String @db.NVarChar(50)
+  Eshkol                                                           String @db.NVarChar(50)
+  Rishut                                                           String @db.NVarChar(50)
+  Yishuv_Code                                                      Int
+  Yishuv_Number                                                    Int @id
+  Yishuv_Name                                                      String @db.NVarChar(50)
+  Religion                                                         String @db.NVarChar(50)
+  Population_Regular_21_7                                          Int
+  Self_Evacuated                                                   Int
+  Population_Remaining_Estimate_16_7                               Int
+  Departure_Ratio_Regular                                          Float
+  Independent_Evacuees_Current_Population                          Int
+  Evacuation_By_Buses                                              Int
+  Will_Not_Evacuate                                                Int
+  Age_0_2                                                          Int
+  Age_2_12                                                         Int
+  Age_0_12                                                         Int
+  Age_12_18                                                        Int
+  Age_0_2_Remaining                                                Int
+  Age_2_12_Remaining                                               Int
+  Age_0_12_Remaining                                               Int
+  Age_12_18_Remaining                                              Int
+  Bus_Count                                                        Int
+  Families_With_Children_Count                                     Int
+  Families_With_Children_Evacuated_Count                           Int
+  Rooms_Required_For_Families_With_Children_Evacuated              Int
+  Residents_Without_Family_Evacuated_Count                         Int
+  Rooms_For_Residents_Without_Minor_Children                       Int
+  Total_Rooms_Required_All_Evacuees                                Int
+  Total_Rooms_Required_For_Bus_Evacuees                            Int
+  Total_Rooms_Required_For_Independent_Evacuees_After_Order        Int
+  Total_Rooms_Required_All_Evacuees_After_Order                    Int
+  Total_Estimated_Rooms_For_Residents_Outside_Yishuv_July_24       Int
+  Total_Estimated_Rooms_For_Eligible_Residents_Excluding_Remaining Int
+
+  @@map("TBL_evacuation_data")
   @@schema("dbo")
 }
