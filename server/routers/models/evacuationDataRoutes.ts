@@ -1,14 +1,16 @@
 import express, { Request, Response } from "express";
 import prisma from "../../db";
-import { TBL_evacuation_data } from "@prisma/client";
 
 const router = express.Router();
 
-interface EvacuationDataResponse {
+export interface EvacuationDataResponse {
   yishuvName: string;
   yishuvNumber: number;
   population: number;
   would_need_room_estimated: number;
+  Eshkol: string;
+  Merhav: string;
+  Rishut: string;
 }
 
 router.get('/', async (_req: Request, res: Response<EvacuationDataResponse[]>) => {
@@ -19,13 +21,19 @@ router.get('/', async (_req: Request, res: Response<EvacuationDataResponse[]>) =
         Yishuv_Number: true,
         Population_Regular_21_7: true,
         Total_Estimated_Rooms_For_Eligible_Residents_Excluding_Remaining: true,
+        Eshkol: true,
+        Merhav: true,
+        Rishut: true,
       }
     });
     const data =  evacuationData.map((item) => ({
         yishuvName: item.Yishuv_Name,
         yishuvNumber: item.Yishuv_Number,
         population: item.Population_Regular_21_7,
-        would_need_room_estimated: item.Total_Estimated_Rooms_For_Eligible_Residents_Excluding_Remaining
+        would_need_room_estimated: item.Total_Estimated_Rooms_For_Eligible_Residents_Excluding_Remaining,
+        Eshkol: item.Eshkol,
+        Merhav: item.Merhav,
+        Rishut: item.Rishut,
     }))
     res.json(data);
   } catch (error) {

@@ -2,6 +2,7 @@ import {useEffect, useState} from 'react';
 import {staticDataStore} from '../stores/static-data-store';
 import {observer} from 'mobx-react-lite';
 import {
+    Accordion,
     ActionIcon, Box,
     Button,
     Card,
@@ -20,7 +21,7 @@ import {
     IconUsersGroup,
     IconDisabled,
     IconReload,
-    IconX
+    IconX, IconPercentage, IconBuildings
 } from '@tabler/icons-react';
 import {evacPlanStore} from '../stores/evac-plan-store';
 import {EnrichedSettlement} from '../../../server/routers/models/settlementRoutes.ts';
@@ -87,6 +88,88 @@ const NewPlan = () => {
                             </Box>
                         </Group>
                     </Card>
+
+                    <Accordion variant="separated">
+                        <Accordion.Item key={'settlements'} value={'settlements'}>
+                            <Accordion.Control disabled={evacPlanStore.mode === 'static'}>
+                                <Group>
+                                    <IconPercentage size={40}/>
+                                    <Stack gap={2}>
+                                        <Title order={4}>משתנים דינמים</Title>
+                                    </Stack>
+                                </Group>
+                            </Accordion.Control>
+                            <Accordion.Panel>123</Accordion.Panel>
+                        </Accordion.Item>
+                        <Accordion.Item key={'mode'} value={'mode'}>
+                            <Accordion.Control>
+                                <Group>
+                                    <IconHome size={40}/>
+                                    <Stack gap={2}>
+                                        <Title order={4} className="flex gap-2 items-end">
+                                            ישובים לפינוי
+                                            <Text opacity={0.5}>
+                                                מס’ חדרים נדרשים
+                                            </Text>
+                                        </Title>
+                                        <Group gap={4}>
+                                            <Text>
+                                                כל היישובים
+                                            </Text>
+                                            <Text>
+                                                •
+                                            </Text>
+                                            <Text>
+                                                {staticDataStore.allSettlements.length}
+                                            </Text>
+                                        </Group>
+                                    </Stack>
+                                </Group>
+                            </Accordion.Control>
+                            <Accordion.Panel>
+                                {Object.entries(staticDataStore.settlementsByEshkol).map(([key, settlements]) => (
+                                    <>
+                                        <Title order={4}>{settlements[0].Merhav} / {settlements[0].Rishut} / {settlements[0].Eshkol}</Title>
+                                        <Group>
+                                            {settlements.map((settlement) => (
+                                                <Card>
+                                                    {settlement.yishuvName}
+                                                </Card>
+                                            ))}
+                                        </Group>
+                                    </>
+                                ))}
+                            </Accordion.Panel>
+                        </Accordion.Item>
+                        <Accordion.Item key={'hotels'} value={'hotels'}>
+                            <Accordion.Control>
+                                <Group>
+                                    <IconBuildings size={40}/>
+                                    <Stack gap={2}>
+                                        <Title order={4} className="flex gap-2 items-end">
+                                            יעדים להתפנות
+                                            <Text opacity={0.5}>
+                                                מס’ חדרים זמינים במלון
+                                            </Text>
+                                        </Title>
+                                        <Group gap={4}>
+                                            <Text>
+                                                כל היעדים
+                                            </Text>
+                                            <Text>
+                                                •
+                                            </Text>
+                                            <Text>
+                                                {staticDataStore.hotelsWithRooms.length}
+                                            </Text>
+                                        </Group>
+                                    </Stack>
+                                </Group>
+                            </Accordion.Control>
+                            <Accordion.Panel>123</Accordion.Panel>
+                        </Accordion.Item>
+                    </Accordion>
+
                     <Group>
                         <Title order={3}>ישובים לפינוי</Title>
                         <Button variant="subtle" size='sm' leftSection={<IconPlus size={16}/>}

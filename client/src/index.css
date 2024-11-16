@@ -2,3 +2,7 @@
   scale: 0.4;
   margin: -10px !important;
 }
+
+.mantine-Accordion-chevron {
+  zoom: 2;
+}

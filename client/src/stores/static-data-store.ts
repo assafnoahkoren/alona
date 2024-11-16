@@ -2,12 +2,14 @@ import {makeAutoObservable, runInAction} from 'mobx';
 import apiService from '../services/apiService';
 import {EnrichedHotel} from '../../../server/routers/models/hotelRoutes';
 import {EnrichedSettlement} from '../../../server/routers/models/settlementRoutes';
-import {EvacuationData} from "../services/evacuationDataService.ts";
+import {EvacuationDataResponse} from '../../../server/routers/models/evacuationDataRoutes.ts';
+
+type MerhavRashutEshkol_Key = string;
 
 export class StaticDataStore {
     hotels: EnrichedHotel[] = [];
     settlements: EnrichedSettlement[] = [];
-    evacuationData: EvacuationData[] = [];
+    evacuationData: EvacuationDataResponse[] = [];
     isLoading = false;
     initialized = false;
     error: string | null = null;
@@ -51,6 +53,18 @@ export class StaticDataStore {
 
     get settlementsNotToEvacuate() {
         return this.settlements.filter(settlement => !settlement.Settlements_To_Evacuate || settlement.Settlements_To_Evacuate.length === 0);
+    }
+
+    get settlementsByEshkol() {
+        const map: Record<MerhavRashutEshkol_Key, EvacuationDataResponse[]> = {}
+        this.evacuationData.forEach(evacData => {
+            const key = `${evacData.Rishut}_${evacData.Merhav}_${evacData.Eshkol}`;
+            if (!map[key]) {
+                map[key] = [];
+            }
+            map[key].push(evacData);
+        });
+        return map;
     }
 
     get hotelsWithRooms() {
