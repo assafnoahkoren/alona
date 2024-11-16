@@ -7,6 +7,7 @@ import hotelRoutes from './models/hotelRoutes';
 import idfSettlementRoutes from './models/settlementRoutes';
 import allocationRoutes from './models/allocationRoutes';
 import algorithmRunRoutes from './models/algorithmRunRoutes';
+import evacuationDataRoutes from "./models/evacuationDataRoutes";
 
 const authenticatedRouter = express.Router();
 
@@ -17,6 +18,7 @@ authenticatedRouter.use('/hotels', hotelRoutes);
 authenticatedRouter.use('/settlements', idfSettlementRoutes);
 authenticatedRouter.use('/allocations', allocationRoutes);
 authenticatedRouter.use('/algorithm-runs', algorithmRunRoutes);
+authenticatedRouter.use('/evacuation-data', evacuationDataRoutes);
 export type Group = {
   name: string,
   rooms: number,
