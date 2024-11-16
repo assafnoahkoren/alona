@@ -1,12 +1,15 @@
-import { makeAutoObservable, runInAction } from 'mobx';
+import {makeAutoObservable, runInAction} from 'mobx';
 import apiService from '../services/apiService';
-import { EnrichedHotel } from '../../../server/routers/models/hotelRoutes';
-import { EnrichedSettlement } from '../../../server/routers/models/settlementRoutes';
+import {EnrichedHotel} from '../../../server/routers/models/hotelRoutes';
+import {EnrichedSettlement} from '../../../server/routers/models/settlementRoutes';
+import {EvacuationData} from "../services/evacuationDataService.ts";
 
 export class StaticDataStore {
     hotels: EnrichedHotel[] = [];
     settlements: EnrichedSettlement[] = [];
+    evacuationData: EvacuationData[] = [];
     isLoading = false;
+    initialized = false;
     error: string | null = null;
 
     constructor() {
@@ -16,14 +19,17 @@ export class StaticDataStore {
     public async fetchData() {
         try {
             this.isLoading = true;
-            const [hotelsResponse, settlementsResponse] = await Promise.all([
+            this.initialized = true;
+            const [hotelsResponse, settlementsResponse, evacuationDataResponse] = await Promise.all([
                 apiService.hotels.getAll(),
-                apiService.settlements.getAll()
+                apiService.settlements.getAll(),
+                apiService.evacuationData.getAll()
             ]);
 
             runInAction(() => {
                 this.hotels = hotelsResponse;
                 this.settlements = settlementsResponse;
+                this.evacuationData = evacuationDataResponse;
                 this.isLoading = false;
             });
         } catch (error) {
@@ -36,6 +42,11 @@ export class StaticDataStore {
 
     get settlementsToEvacuate() {
         return this.settlements.filter(settlement => settlement.Settlements_To_Evacuate.length > 0);
+    }
+
+    get allSettlements(): EnrichedSettlement[] {
+        return this.settlements;
+
     }
 
     get settlementsNotToEvacuate() {

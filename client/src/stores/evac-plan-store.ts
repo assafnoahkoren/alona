@@ -12,9 +12,12 @@ type Results =  {
 }
 class EvacPlanStore {
     algorithmRuns: Record<AlgorithmRunId, Results> = {};
+    mode: 'static' | 'dynamic' = 'static';
+
     constructor() {
         makeAutoObservable(this);
     }
+
 
     async createEvacPlan() {
         const { algorithmRun, result } = await algorithmRunService.create({
