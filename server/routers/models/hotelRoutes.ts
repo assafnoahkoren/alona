@@ -25,6 +25,7 @@ router.get('/', async (_req: Request, res: Response<EnrichedHotel[]>) => {
     }));
     res.json(enrichedHotels);
   } catch (error) {
+    console.error(error);
     res.status(500).json([]);
   }
 });

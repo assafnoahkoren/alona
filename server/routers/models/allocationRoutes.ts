@@ -20,6 +20,7 @@ router.get('/', async (_req: Request, res: Response<Allocations[]>) => {
     });
     res.json(allocations);
   } catch (error) {
+    console.error(error);
     res.status(500).json([]);
   }
 });

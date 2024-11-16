@@ -1,10 +1,10 @@
+import 'dotenv/config'
 import express from 'express';
 import staticRouter from './routers/staticRouter';
 import apiRouter from './routers/apiRouter';
 import morgan from 'morgan';
 const app = express();
 const port = process.env.SERVER_PORT || 3000;
-
 // Use morgan middleware for logging
 app.use(morgan('combined'));
 

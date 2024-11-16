@@ -10,11 +10,11 @@ export interface CreateAllocationDto {
 
 const allocationService = {
   getAll: async () => {
-    const response = await axios.get(`${BASE_URL}/allocations`);
+    const response = await axios.get(`${BASE_URL}/auth/allocations`);
     return response.data;
   },
   create: async (data: CreateAllocationDto) => {
-    const response = await axios.post(`${BASE_URL}/allocations`, data);
+    const response = await axios.post(`${BASE_URL}/auth/allocations`, data);
     return response.data;
   }
 };

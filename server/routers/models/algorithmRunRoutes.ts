@@ -24,6 +24,7 @@ router.get('/', async (_req: Request, res: Response<Algorithm_Run[]>) => {
     });
     res.json(runs);
   } catch (error) {
+    console.error(error);
     res.status(500).json([]);
   }
 });
