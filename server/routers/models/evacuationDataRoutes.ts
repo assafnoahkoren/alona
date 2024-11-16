@@ -4,7 +4,14 @@ import { TBL_evacuation_data } from "@prisma/client";
 
 const router = express.Router();
 
-router.get('/', async (_req: Request, res: Response<TBL_evacuation_data[]>) => {
+interface EvacuationDataResponse {
+  yishuvName: string;
+  yishuvNumber: number;
+  population: number;
+  would_need_room_estimated: number;
+}
+
+router.get('/', async (_req: Request, res: Response<EvacuationDataResponse[]>) => {
   try {
     const evacuationData = await prisma.tBL_evacuation_data.findMany({
       select: {
