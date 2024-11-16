@@ -10,7 +10,6 @@ export interface EvacuationData {
 
 const evacuationDataService = {
   getAll: async (): Promise<EvacuationData[]> => {
-  getAll: async () => {
     const response = await axios.get(`${BASE_URL}/auth/evacuation-data`);
     return response.data;
   }
