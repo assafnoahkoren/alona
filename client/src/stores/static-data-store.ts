@@ -10,6 +10,7 @@ export class StaticDataStore {
     hotels: EnrichedHotel[] = [];
     settlements: EnrichedSettlement[] = [];
     evacuationData: EvacuationDataResponse[] = [];
+    settlementsIdsToEvacuate: number[] = [];
     isLoading = false;
     initialized = false;
     error: string | null = null;
@@ -27,8 +28,17 @@ export class StaticDataStore {
                 apiService.settlements.getAll(),
                 apiService.evacuationData.getAll()
             ]);
-
+            
             runInAction(() => {
+                this.settlementsIdsToEvacuate = settlementsResponse.map(row => {
+                    if (row.Settlement_sign) {
+                        const settlementId = parseInt(row.Settlement_sign);
+                        if (!isNaN(settlementId)) {
+                            return settlementId;
+                        }
+                    }
+                    return null;
+                }).filter(id => id !== null) as number[];
                 this.hotels = hotelsResponse;
                 this.settlements = settlementsResponse;
                 this.evacuationData = evacuationDataResponse;
@@ -43,7 +53,8 @@ export class StaticDataStore {
     }
 
     get settlementsToEvacuate() {
-        return this.settlements.filter(settlement => settlement.Settlements_To_Evacuate.length > 0);
+        const evacSettlementsIds = this.settlements.map(settlement => settlement.Settlement_sign);
+        return this.evacuationData.filter(row => evacSettlementsIds.includes(row.yishuvNumber.toString()));
     }
 
     get allSettlements(): EnrichedSettlement[] {
@@ -66,9 +77,22 @@ export class StaticDataStore {
         });
         return map;
     }
+    
 
     get hotelsWithRooms() {
         return this.hotels.filter(hotel => hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0) > 0);
+    }
+
+    get hotelsWithRoomsMapByCity() {
+        const map: Record<string, EnrichedHotel[]> = {};
+        this.hotelsWithRooms.forEach(hotel => {
+            if (!hotel.City) {
+                return;
+            }
+            map[hotel.City] = map[hotel.City] || [];
+            map[hotel.City].push(hotel);
+        });
+        return map;
     }
 }
 

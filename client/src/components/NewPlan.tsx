@@ -1,14 +1,17 @@
-import {useEffect, useState} from 'react';
-import {staticDataStore} from '../stores/static-data-store';
-import {observer} from 'mobx-react-lite';
+import { useEffect, useState } from 'react';
+import { staticDataStore } from '../stores/static-data-store';
+import { observer } from 'mobx-react-lite';
 import {
     Accordion,
     ActionIcon, Box,
     Button,
     Card,
+    Divider,
     Group, Image,
-    Modal, NumberInput, Select,
+    Modal, NumberInput, Pill, Select,
+    Space,
     Stack,
+    Switch,
     Text,
     Title,
     Tooltip
@@ -21,13 +24,15 @@ import {
     IconUsersGroup,
     IconDisabled,
     IconReload,
-    IconX, IconPercentage, IconBuildings
+    IconX, IconPercentage, IconBuildings,
+    IconSend,
+    IconUsers
 } from '@tabler/icons-react';
-import {evacPlanStore} from '../stores/evac-plan-store';
-import {EnrichedSettlement} from '../../../server/routers/models/settlementRoutes.ts';
-import {modals} from '@mantine/modals';
-import {useDisclosure} from '@mantine/hooks';
-import {useForm} from '@mantine/form';
+import { evacPlanStore } from '../stores/evac-plan-store';
+import { EnrichedSettlement } from '../../../server/routers/models/settlementRoutes.ts';
+import { modals } from '@mantine/modals';
+import { useDisclosure } from '@mantine/hooks';
+import { useForm } from '@mantine/form';
 import settlementToEvacuateService from '../services/settlementToEvacuateService.ts';
 
 const NewPlan = () => {
@@ -58,7 +63,7 @@ const NewPlan = () => {
                     האם את/ה בטוח/ה שברוצנך להסיר את היישוב?
                 </Text>
             ),
-            labels: {confirm: 'הסרה', cancel: 'ביטול'},
+            labels: { confirm: 'הסרה', cancel: 'ביטול' },
             onConfirm: async () => {
                 await settlementToEvacuateService.delete(settlementId);
                 await staticDataStore.fetchData();
@@ -72,7 +77,7 @@ const NewPlan = () => {
                 <Stack>
                     <Card className="flex-col pb-0 gap-6">
                         <Group>
-                            <Image w={56} h={56} src="/building.png"/>
+                            <Image w={56} h={56} src="/building.png" />
                             <Title order={3}>הרצת אלגוריתם שיבוץ למלונות</Title>
                         </Group>
                         <Group>
@@ -93,18 +98,18 @@ const NewPlan = () => {
                         <Accordion.Item key={'settlements'} value={'settlements'}>
                             <Accordion.Control disabled={evacPlanStore.mode === 'static'}>
                                 <Group>
-                                    <IconPercentage size={40}/>
+                                    <IconPercentage size={40} />
                                     <Stack gap={2}>
                                         <Title order={4}>משתנים דינמים</Title>
                                     </Stack>
                                 </Group>
                             </Accordion.Control>
-                            <Accordion.Panel>123</Accordion.Panel>
+                            <Accordion.Panel></Accordion.Panel>
                         </Accordion.Item>
                         <Accordion.Item key={'mode'} value={'mode'}>
                             <Accordion.Control>
                                 <Group>
-                                    <IconHome size={40}/>
+                                    <IconHome size={40} />
                                     <Stack gap={2}>
                                         <Title order={4} className="flex gap-2 items-end">
                                             ישובים לפינוי
@@ -120,31 +125,50 @@ const NewPlan = () => {
                                                 •
                                             </Text>
                                             <Text>
-                                                {staticDataStore.allSettlements.length}
+                                                {staticDataStore.evacuationData.length}
+                                            </Text>
+                                            <Space w={16} />
+                                            <Text>
+                                                מיועדים לפינוי
+                                            </Text>
+                                            <Text>
+                                                •
+                                            </Text>
+                                            <Text>
+                                                {evacPlanStore.getAllSettlementData().filter(data => data.markedForEvac).length}
                                             </Text>
                                         </Group>
                                     </Stack>
                                 </Group>
                             </Accordion.Control>
                             <Accordion.Panel>
-                                {Object.entries(staticDataStore.settlementsByEshkol).map(([key, settlements]) => (
-                                    <>
-                                        <Title order={4}>{settlements[0].Merhav} / {settlements[0].Rishut} / {settlements[0].Eshkol}</Title>
-                                        <Group>
-                                            {settlements.map((settlement) => (
-                                                <Card>
-                                                    {settlement.yishuvName}
-                                                </Card>
-                                            ))}
-                                        </Group>
-                                    </>
-                                ))}
+                                <Stack className='max-h-[300px] overflow-y-auto bg-[#00000005] p-4 rounded-md'>
+                                    {Object.entries(staticDataStore.settlementsByEshkol).map(([key, settlements]) => (
+                                        <>
+                                            <Title order={4}>{settlements[0].Merhav} / {settlements[0].Rishut} / {settlements[0].Eshkol}</Title>
+                                            <Group gap={40}>
+                                                {settlements.map((settlement) => (
+                                                    <Switch
+
+                                                        classNames={{
+                                                            input: 'cursor-pointer',
+                                                        }}
+                                                        label={settlement.yishuvName}
+                                                        checked={evacPlanStore.getSettlementData(settlement.yishuvNumber)?.markedForEvac}
+                                                        onChange={(event) => evacPlanStore.set_markedForEvac(settlement.yishuvNumber, event.currentTarget.checked)}
+                                                    />
+                                                ))}
+                                            </Group>
+                                        </>
+                                    ))}
+
+                                </Stack>
                             </Accordion.Panel>
                         </Accordion.Item>
                         <Accordion.Item key={'hotels'} value={'hotels'}>
                             <Accordion.Control>
                                 <Group>
-                                    <IconBuildings size={40}/>
+                                    <IconBuildings size={40} />
                                     <Stack gap={2}>
                                         <Title order={4} className="flex gap-2 items-end">
                                             יעדים להתפנות
@@ -166,73 +190,64 @@ const NewPlan = () => {
                                     </Stack>
                                 </Group>
                             </Accordion.Control>
-                            <Accordion.Panel>123</Accordion.Panel>
+                            <Accordion.Panel>
+                                <Stack className='max-h-[300px] overflow-y-auto bg-[#00000005] p-4 rounded-md'>
+
+
+                                    {Object.entries(staticDataStore.hotelsWithRoomsMapByCity).map(([city, hotels]) => (
+                                        <Stack>
+                                            <Title order={5}>
+                                                {city}
+                                            </Title>
+                                            <Group wrap='wrap'>
+                                                {hotels.map((hotel) => (
+                                                    <Card key={hotel.Hotel_ID} padding="lg" radius="md" withBorder w={280} className='overflow-visible'>
+                                                        <Group wrap='nowrap'>
+                                                            <Tooltip label={hotel.hotel_name + ' (' + hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0) + ')'} multiline>
+                                                                <Text fw={500} className="truncate max-w-[200px]">{hotel.hotel_name} ({hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0)})</Text>
+                                                            </Tooltip>
+                                                        </Group>
+                                                        <Space h={4} />
+                                                        <Group key={hotel.Hotel_ID + '-rooms'} wrap='nowrap' align='center' justify='flex-start'>
+                                                            {hotel.rooms.map((room) => (
+                                                                room.free_room_count ? <Tooltip label={room.Room_type}>
+                                                                    <Group align='center' justify='center' gap={4}>
+                                                                        {getRoomTypeIcon(room.Room_type)} {room.free_room_count}
+                                                                    </Group>
+                                                                </Tooltip> : null
+                                                            ))}
+                                                        </Group>
+                                                        <Group justify='center' className='absolute left-0 top-0 w-full '>
+                                                            <Switch className='relative -translate-y-1/2'
+                                                                checked={evacPlanStore.getHotelData(hotel.Hotel_ID).markedForAcceptance}
+                                                                onChange={(event) => evacPlanStore.set_markedForAcceptance(hotel.Hotel_ID, event.currentTarget.checked)}
+                                                            />
+                                                        </Group>
+                                                    </Card>
+                                                ))}
+                                            </Group>
+
+                                            <Divider />
+                                        </Stack>
+                                    ))}
+                                </Stack>
+                            </Accordion.Panel>
                         </Accordion.Item>
                     </Accordion>
-
-                    <Group>
-                        <Title order={3}>ישובים לפינוי</Title>
-                        <Button variant="subtle" size='sm' leftSection={<IconPlus size={16}/>}
-                                onClick={() => openCreateSettlementModal()}>הוסף</Button>
-                        <Modal opened={createSettlementModalOpened} onClose={closeCreateSettlementModal}
-                               title="הוספת יישוב">
-                            <SelectSettlementToEvacuate onClose={() => closeCreateSettlementModal()}/>
-                        </Modal>
-                    </Group>
-                    <Group>
-                        {staticDataStore.allSettlements.map((settlement) => (
-                            <Card key={settlement.Settlement_id} shadow="sm" padding="lg" radius="md" withBorder
-                                  w={280}>
-                                <Group justify="space-between">
-                                    <Group wrap='nowrap'>
-                                        <IconHome size={24} color="#4C6EF5"/>
-                                        <Tooltip label={settlement.Name} multiline>
-                                            <Text fw={500} className="truncate max-w-[120px]">{settlement.Name}</Text>
-                                        </Tooltip>
-                                    </Group>
-                                    <ActionIcon variant="outline" color="red" radius="xl" aria-label="delete" size="xs"
-                                                onClick={() => removeSettlement(settlement.Settlements_To_Evacuate[0].ID)}>
-                                        <IconX/>
-                                    </ActionIcon>
-                                </Group>
-                                <Text size="sm" c="dimmed">
-                                    מספר חדרים
-                                    נדרשים: {settlement.Settlements_To_Evacuate[0]?.rooms_needed || 'לא ידוע'}
-                                </Text>
-                            </Card>
-                        ))}
-                    </Group>
-                </Stack>
-
-                <Stack>
-                    <Title order={3}>יעדי פינוי</Title>
-                    <Group wrap='wrap'>
-                        {staticDataStore.hotelsWithRooms.map((hotel) => (
-                            <Card key={hotel.Hotel_ID} shadow="sm" padding="lg" radius="md" withBorder w={280}>
-                                <Group wrap='nowrap'>
-                                    <IconBuilding size={24} color="#4C6EF5"/>
-                                    <Tooltip label={hotel.hotel_name} multiline>
-                                        <Text fw={500} className="truncate max-w-[200px]">{hotel.hotel_name}</Text>
-                                    </Tooltip>
-                                </Group>
-                                <Text size="sm" c="dimmed">
-                                    <u>חדרים
-                                        זמינים: {hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0)}</u>
-                                    {hotel.rooms.map((room) => (
-                                        <Group key={room.Room_ID} wrap='nowrap' align='center' justify='flex-start'
-                                               gap={4}>
-                                            {getRoomTypeIcon(room.Room_type)} {room.Room_type} ({room.free_room_count})
-                                        </Group>
-                                    ))}
-                                </Text>
-                            </Card>
-                        ))}
-                    </Group>
                 </Stack>
             </Stack>
-            <Group className='bg-blue-200 p-4' justify='center'>
-                <Button px={40} variant='white' leftSection={<IconReload size={20}/>}
-                        onClick={() => evacPlanStore.createEvacPlan()}>צור תכנית פינוי</Button>
+            <Group className='bg-white p-4' justify='space-between'>
+                <Group>
+                    <Title order={5}>
+                        חדרים זמינים: {evacPlanStore.getTotalAvailableRooms()}
+                    </Title>
+                    <Title order={5}>
+                        חדרים נדרשים: {evacPlanStore.getTotalRequiredRooms()}
+                    </Title>
+                </Group>
+                <Button px={40} variant='filled' leftSection={<IconSend size={20} />}
+                    onClick={() => evacPlanStore.createEvacPlan()}>שליחה</Button>
+
             </Group>
         </Stack>
     );
@@ -240,9 +255,10 @@ const NewPlan = () => {
 
 function getRoomTypeIcon(roomType: string | null | undefined) {
     const roomTypeIcons = new Map([
-        ['חדרים משפחתיים', <IconUsersGroup size={20} color="#4C6EF5" opacity={0.8}/>],
-        ['חדרי סינגל', <IconUser size={20} color="#4C6EF5" opacity={0.8}/>],
-        ['חדרים נגישים', <IconDisabled size={20} color="#4C6EF5" opacity={0.8}/>]
+        ['חדרים משפחתיים', <IconUsersGroup size={20} color="#4C6EF5" opacity={0.8} />],
+        ['חדרי סינגל', <IconUser size={20} color="#4C6EF5" opacity={0.8} />],
+        ['חדרים נגישים', <IconDisabled size={20} color="#4C6EF5" opacity={0.8} />],
+        ['חדרים זוגיים', <IconUsers size={20} color="#4C6EF5" opacity={0.8} />],
     ]);
 
     if (!roomType) {
@@ -252,7 +268,7 @@ function getRoomTypeIcon(roomType: string | null | undefined) {
     return roomTypeIcons.get(roomType) || null;
 }
 
-const SelectSettlementToEvacuate = ({onClose}: { onClose: () => void }) => {
+const SelectSettlementToEvacuate = ({ onClose }: { onClose: () => void }) => {
     const [loading, setLoading] = useState(false);
     const form = useForm<{
         settlement: EnrichedSettlement['Settlement_id'] | null,

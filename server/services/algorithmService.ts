@@ -30,7 +30,7 @@ const algorithmService = {
     // Get settlements' needed rooms
     const neededRooms = input.settlements.map((settlement) => ({
       settlementID: settlement.Settlement_id,
-      rooms: parseInt(settlement.Settlements_To_Evacuate[0].rooms_needed || "0"),
+      rooms: parseInt(settlement.rooms_needed),
     }));
 
     const allocations: Record<SettlementID, RoomsByHotel> = {};
