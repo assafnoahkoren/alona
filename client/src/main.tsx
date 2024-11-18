@@ -2,6 +2,8 @@ import { createRoot } from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.tsx';
 import 'virtual:uno.css'
+import 'mapbox-gl/dist/mapbox-gl.css';
+
 
 function deepToJS(obj: any): any {
   if (Array.isArray(obj)) {
