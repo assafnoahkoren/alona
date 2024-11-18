@@ -3,7 +3,7 @@ import ActionCard from "./ActionCard";
 
 const Home = () => {
   return <>
-    <Stack>
+    <Stack className="p-4">
       <Title order={3} className='p-4'>מה ברצונך לעשות?</Title>
       <Group wrap="wrap">
         <ActionCard title="מסכי שליטה (9 דשבורדים)" subtitle="עודכן בתאריך 01/01/00" />

@@ -37,6 +37,7 @@ type Parameters = {
 
 router.post('/', async (req: Request<{}, {}, CreateAlgorithmRunDto>, res: Response) => {
   try {
+    await prisma.allocations.deleteMany();
     const newRun = await prisma.algorithm_Run.create({
       data: {}
     });

@@ -6,7 +6,7 @@ import Profile from './components/Profile';
 import Settings from './components/Settings';
 import Login from './components/Login';
 import Signup from './components/Signup';
-import NewPlan from './components/NewPlan';
+import NewPlan from './components/NewPlan/NewPlan';
 
 const AppRoutes = () => (
   <Routes>

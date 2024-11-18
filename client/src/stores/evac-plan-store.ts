@@ -24,14 +24,30 @@ type HotelData = {
 
 class EvacPlanStore {
   algorithmRuns: Record<AlgorithmRunId, Results> = {};
-  mode: "static" | "dynamic" = "static";
   settlementDataMap: Record<number, SettlementData> = {};
   hotelsDataMap: Record<string, HotelData> = {};
-
+  mode: "static" | "dynamic" = "static";
+  requiredRoomsPopulationPercentage: number = 80;
+  fitInRoom: number = 4;
   constructor() {
     makeAutoObservable(this);
   }
+  getRoomsNeededForEvacuation(evacData?: EvacuationDataResponse): number {
+    if (this.mode === "static") {
+      return evacData?.would_need_room_estimated ?? 0;
+    }
+    const population = evacData?.population ?? 0;
+    if (population === 0) {
+      return 0;
+    }
 
+
+    
+    return Math.ceil(
+      population * (this.requiredRoomsPopulationPercentage / 100) / this.fitInRoom,
+    );
+    
+  }
   async createEvacPlan() {
     const { algorithmRun, result } = await algorithmRunService.create({
       parameters: JSON.stringify({
@@ -40,7 +56,7 @@ class EvacPlanStore {
           Settlement_id: staticDataStore.settlements.find((settlement) => settlement.Settlement_sign === row.evacData?.yishuvNumber.toString())?.Settlement_id,
           Name: row.evacData?.yishuvName,
           Settlement_sign: row.evacData?.yishuvNumber,
-          rooms_needed: row.evacData?.would_need_room_estimated,
+          rooms_needed: this.getRoomsNeededForEvacuation(row.evacData),
         })),
       }),
     });
@@ -107,6 +123,9 @@ class EvacPlanStore {
     data.markedForAcceptance = markedForAcceptance;
     this.hotelsDataMap[hotelId] = data;
   }
+  toggle_markedForAcceptance(hotelId: string) {
+    this.set_markedForAcceptance(hotelId, !this.getHotelData(hotelId).markedForAcceptance);
+  }
 
   getHotelData(hotelId: string): HotelData {
     const data = this.hotelsDataMap[hotelId] ?? {};
@@ -130,7 +149,7 @@ class EvacPlanStore {
       data.markedForEvac
     );
     return settlements.reduce(
-      (acc, data) => acc + this.getRequiredRooms(data.evacData),
+      (acc, data) => acc + this.getRoomsNeededForEvacuation(data.evacData),
       0,
     );
   }

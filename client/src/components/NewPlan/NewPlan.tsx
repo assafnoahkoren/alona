@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { staticDataStore } from '../stores/static-data-store';
+import { staticDataStore } from '../../stores/static-data-store.ts';
 import { observer } from 'mobx-react-lite';
 import {
     Accordion,
@@ -9,6 +9,7 @@ import {
     Divider,
     Group, Image,
     Modal, NumberInput, Pill, Select,
+    Slider,
     Space,
     Stack,
     Switch,
@@ -28,12 +29,13 @@ import {
     IconSend,
     IconUsers
 } from '@tabler/icons-react';
-import { evacPlanStore } from '../stores/evac-plan-store';
-import { EnrichedSettlement } from '../../../server/routers/models/settlementRoutes.ts';
+import { evacPlanStore } from '../../stores/evac-plan-store.ts';
+import { EnrichedSettlement } from '../../../../server/routers/models/settlementRoutes.ts';
 import { modals } from '@mantine/modals';
 import { useDisclosure } from '@mantine/hooks';
 import { useForm } from '@mantine/form';
-import settlementToEvacuateService from '../services/settlementToEvacuateService.ts';
+import settlementToEvacuateService from '../../services/settlementToEvacuateService.ts';
+import SettlementSwitch from './SettlementSwitch.tsx';
 
 const NewPlan = () => {
     const [createSettlementModalOpened, {
@@ -104,7 +106,54 @@ const NewPlan = () => {
                                     </Stack>
                                 </Group>
                             </Accordion.Control>
-                            <Accordion.Panel></Accordion.Panel>
+                            <Accordion.Panel>
+                                <Group className='w-full'>
+                                    <Stack gap={4}>
+                                        <Group justify='space-between'>
+                                            <Text>אחוז דורשי מלון</Text>
+                                            <Text fw='bold'>
+                                                {evacPlanStore.requiredRoomsPopulationPercentage}%
+                                            </Text>
+                                        </Group>
+
+                                        <Slider className='w-[300px] mb-4'
+                                            onChangeEnd={(value) => evacPlanStore.requiredRoomsPopulationPercentage = value}
+                                            defaultValue={evacPlanStore.requiredRoomsPopulationPercentage}
+                                            color="blue"
+                                            size="xl"
+                                            marks={[
+                                                { value: 20, label: '20%' },
+                                                { value: 50, label: '50%' },
+                                                { value: 80, label: '80%' },
+                                            ]}
+                                        />
+                                    </Stack>
+                                    <Space h={16} />
+                                    <Stack gap={4}>
+                                        <Group justify='space-between'>
+                                            <Text>כמות נפשות לחדר</Text>
+                                            <Text fw='bold'>
+                                                {evacPlanStore.fitInRoom}
+                                            </Text>
+                                        </Group>
+                                        <Slider className='w-[300px] mb-4'
+                                            onChangeEnd={(value) => evacPlanStore.fitInRoom = value}
+                                            defaultValue={evacPlanStore.fitInRoom}
+                                            color="blue"
+                                            size="xl"
+                                            min={0}
+                                            max={10}
+                                            step={0.5}
+                                            marks={[
+                                                { value: 2, label: '2' },
+                                                { value: 5, label: '5' },
+                                                { value: 8, label: '8' },
+                                            ]}
+                                        />
+                                    </Stack>
+
+                                </Group>
+                            </Accordion.Panel>
                         </Accordion.Item>
                         <Accordion.Item key={'mode'} value={'mode'}>
                             <Accordion.Control>
@@ -148,15 +197,7 @@ const NewPlan = () => {
                                             <Title order={4}>{settlements[0].Merhav} / {settlements[0].Rishut} / {settlements[0].Eshkol}</Title>
                                             <Group gap={40}>
                                                 {settlements.map((settlement) => (
-                                                    <Switch
-
-                                                        classNames={{
-                                                            input: 'cursor-pointer',
-                                                        }}
-                                                        label={settlement.yishuvName}
-                                                        checked={evacPlanStore.getSettlementData(settlement.yishuvNumber)?.markedForEvac}
-                                                        onChange={(event) => evacPlanStore.set_markedForEvac(settlement.yishuvNumber, event.currentTarget.checked)}
-                                                    />
+                                                    <SettlementSwitch settlement={settlement} />
                                                 ))}
                                             </Group>
                                         </>
@@ -201,7 +242,8 @@ const NewPlan = () => {
                                             </Title>
                                             <Group wrap='wrap'>
                                                 {hotels.map((hotel) => (
-                                                    <Card key={hotel.Hotel_ID} padding="lg" radius="md" withBorder w={280} className='overflow-visible'>
+                                                    <Card key={hotel.Hotel_ID} padding="lg" radius="md" withBorder w={280} className='overflow-visible cursor-pointer'
+                                                        onClick={() => evacPlanStore.toggle_markedForAcceptance(hotel.Hotel_ID)}>
                                                         <Group wrap='nowrap'>
                                                             <Tooltip label={hotel.hotel_name + ' (' + hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0) + ')'} multiline>
                                                                 <Text fw={500} className="truncate max-w-[200px]">{hotel.hotel_name} ({hotel.rooms.reduce((acc, room) => acc + room.free_room_count, 0)})</Text>
