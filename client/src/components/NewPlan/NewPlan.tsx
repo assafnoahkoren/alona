@@ -232,7 +232,7 @@ const NewPlan = () => {
                                         <IconBuildings size={40} />
                                         <Stack gap={2}>
                                             <Title order={4} className="flex gap-2 items-end">
-                                                יעדים להתפנות
+                                                יעדי קליטה
                                                 <Text opacity={0.5}>
                                                     מס’ חדרים זמינים במלון
                                                 </Text>
@@ -259,7 +259,7 @@ const NewPlan = () => {
                                         </Button>
                                     </Group>
                                     <Stack className='max-h-[300px] overflow-y-auto'>
-                                        {Object.entries(staticDataStore.hotelsWithRoomsMapByCity).map(([city, hotels]) => (
+                                        {sortEntriesByCity(Object.entries(staticDataStore.hotelsWithRoomsMapByCity)).map(([city, hotels]) => (
                                             <Stack>
                                                 <Group gap={6}>
                                                     <Title order={5}>
@@ -419,3 +419,7 @@ const SelectSettlementToEvacuate = ({ onClose }: { onClose: () => void }) => {
 }
 
 export default observer(NewPlan);
+
+function sortEntriesByCity(entries: [string, any][]) {
+    return entries.sort((a, b) => a[0].localeCompare(b[0]));
+}
