@@ -7,6 +7,7 @@ import {
     ActionIcon, Box,
     Button,
     Card,
+    Chip,
     Divider,
     Group, Image,
     Modal, NumberInput, Pill, Select,
@@ -28,7 +29,9 @@ import {
     IconReload,
     IconX, IconPercentage, IconBuildings,
     IconSend,
-    IconUsers
+    IconUsers,
+    IconExclamationCircle,
+    IconCheck
 } from '@tabler/icons-react';
 import { evacPlanStore } from '../../stores/evac-plan-store.ts';
 import { EnrichedSettlement } from '../../../../server/routers/models/settlementRoutes.ts';
@@ -74,7 +77,7 @@ const NewPlan = () => {
         <Stack justify='space-between' w='100%' gap='0'>
             <Group h='100%' align='flex-start'>
                 <Stack flex={1} gap="xl" p='md'>
-                    <Stack>
+                    <Stack className='overflow-y-auto'>
                         <Card className="flex-col pb-0 gap-6">
                             <Group>
                                 <Image w={56} h={56} src="/building.png" />
@@ -188,11 +191,30 @@ const NewPlan = () => {
                                         </Stack>
                                     </Group>
                                 </Accordion.Control>
-                                <Accordion.Panel>
-                                    <Stack className='max-h-[300px] overflow-y-auto bg-[#00000005] p-4 rounded-md'>
+                                <Accordion.Panel className='bg-[#00000005] rounded-md'>
+                                    <Group className='py-4'>
+                                        <Text>פעולות</Text>
+                                        <Button onClick={() => evacPlanStore.toggleAllSelection()}>
+                                            {evacPlanStore.isAnySettlementSelected() ? 'בטל הכל' : 'בחר הכל'}
+                                        </Button>
+                                        {staticDataStore.getMerhavim().map(merhav => (
+                                            <Button onClick={() => evacPlanStore.toggleMerhavSelection(merhav)}
+                                                variant={evacPlanStore.isMerhavSelected(merhav) ? 'filled' : 'outline'}>
+                                                {evacPlanStore.isMerhavSelected(merhav) ? 'בטל' : 'בחר'} {merhav}
+                                            </Button>
+                                        ))}
+
+                                    </Group>
+                                    <Stack className='max-h-[300px] overflow-y-auto'>
                                         {Object.entries(staticDataStore.settlementsByEshkol).map(([key, settlements]) => (
                                             <>
-                                                <Title order={4}>{settlements[0].Merhav} / {settlements[0].Rishut} / {settlements[0].Eshkol}</Title>
+                                                <Group gap={6}>
+                                                    <Title order={4}>{settlements[0].Merhav} / {settlements[0].Rishut} / {settlements[0].Eshkol}</Title>
+                                                    <Button size='xs' px={10} variant='subtle'
+                                                        onClick={() => evacPlanStore.toggleSettlementSelection(settlements)}>
+                                                        {evacPlanStore.isAnyOfSettlementSelected(settlements) ? 'בטל הכל' : 'בחר הכל'}
+                                                    </Button>
+                                                </Group>
                                                 <Group gap={40}>
                                                     {settlements.map((settlement) => (
                                                         <SettlementSwitch settlement={settlement} />
@@ -229,15 +251,25 @@ const NewPlan = () => {
                                         </Stack>
                                     </Group>
                                 </Accordion.Control>
-                                <Accordion.Panel>
-                                    <Stack className='max-h-[300px] overflow-y-auto bg-[#00000005] p-4 rounded-md'>
-
-
+                                <Accordion.Panel className='bg-[#00000005] rounded-md'>
+                                    <Group className='py-4'>
+                                        <Text>פעולות</Text>
+                                        <Button onClick={() => evacPlanStore.toggleHotels(staticDataStore.hotelsWithRooms)}>
+                                            {evacPlanStore.isAnyHotelOfHotelsSelected(staticDataStore.hotelsWithRooms) ? 'בטל הכל' : 'בחר הכל'}
+                                        </Button>
+                                    </Group>
+                                    <Stack className='max-h-[300px] overflow-y-auto'>
                                         {Object.entries(staticDataStore.hotelsWithRoomsMapByCity).map(([city, hotels]) => (
                                             <Stack>
-                                                <Title order={5}>
-                                                    {city}
-                                                </Title>
+                                                <Group gap={6}>
+                                                    <Title order={5}>
+                                                        {city}
+                                                    </Title>
+                                                    <Button size='xs' px={10} variant='subtle'
+                                                        onClick={() => evacPlanStore.toggleHotels(hotels)}>
+                                                        {evacPlanStore.isAnyHotelOfHotelsSelected(hotels) ? 'בטל עיר' : 'בחר עיר'}
+                                                    </Button>
+                                                </Group>
                                                 <Group wrap='wrap'>
                                                     {hotels.map((hotel) => (
                                                         <Card key={hotel.Hotel_ID} padding="lg" radius="md" withBorder w={280} className='overflow-visible cursor-pointer'
@@ -281,13 +313,31 @@ const NewPlan = () => {
                 </Stack>
             </Group>
             <Group className='bg-white p-4' justify='space-between'>
-                <Group>
+                <Group align='center'>
                     <Title order={5}>
-                        חדרים זמינים: {evacPlanStore.getTotalAvailableRooms()}
+                        חדרים זמינים: {evacPlanStore.getTotalAvailableRooms().toLocaleString()}
                     </Title>
                     <Title order={5}>
-                        חדרים נדרשים: {evacPlanStore.getTotalRequiredRooms()}
+                        חדרים נדרשים: {evacPlanStore.getTotalRequiredRooms().toLocaleString()}
                     </Title>
+                    <Chip
+                        className='flex'
+                        icon={evacPlanStore.roomsDifferenceIsNegative() ? <IconExclamationCircle /> : <IconCheck />}
+                        classNames={{
+                            iconWrapper: 'overflow-visible',
+                        }}
+                        color={evacPlanStore.roomsDifferenceIsNegative() ? 'red' : 'green'}
+                        variant="light"
+                        checked
+                    >
+                        <span className='mx-2'>
+                            {evacPlanStore.roomsDifferenceIsNegative() ? (
+                                `חדרים חסרים: ${Math.abs(evacPlanStore.getRoomsDifference()).toLocaleString()}`
+                            ): (
+                                `חדרים פנויים: ${evacPlanStore.getRoomsDifference().toLocaleString()}`
+                            )}
+                        </span>
+                    </Chip>
                 </Group>
                 <Button px={40} variant='filled' leftSection={<IconSend size={20} />}
                     onClick={() => evacPlanStore.createEvacPlan()}>שליחה</Button>

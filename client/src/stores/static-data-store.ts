@@ -94,6 +94,13 @@ export class StaticDataStore {
         });
         return map;
     }
+
+    getMerhavim() {
+        const merhavim = this.evacuationData.map(row => row.Merhav).filter(merhav => merhav !== null);
+        return Array.from(new Set(merhavim));
+    }
+
+    
 }
 
 export const staticDataStore = new StaticDataStore();
