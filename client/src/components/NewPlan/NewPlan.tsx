@@ -87,12 +87,12 @@ const NewPlan = () => {
                                 <Box
                                     className={`border-2 border-blue-500 px-2 pb-1 fw-700 cursor-pointer ${evacPlanStore.mode === 'static' ? 'border-b-solid' : ''}`}
                                     onClick={() => evacPlanStore.mode = 'static'}>
-                                    אפשרות סטטית
+                                    אפשרות סטטיסטית
                                 </Box>
                                 <Box
                                     className={`border-2 border-blue-500 px-2 pb-1 fw-700 cursor-pointer ${evacPlanStore.mode === 'dynamic' ? 'border-b-solid' : ''}`}
                                     onClick={() => evacPlanStore.mode = 'dynamic'}>
-                                    אפשרות דינאמית
+                                    אפשרות פרמטרית
                                 </Box>
                             </Group>
                         </Card>
@@ -205,7 +205,7 @@ const NewPlan = () => {
                                         ))}
 
                                     </Group>
-                                    <Stack className='max-h-[300px] overflow-y-auto'>
+                                    <Stack className='max-h-[250px] overflow-y-auto'>
                                         {Object.entries(staticDataStore.settlementsByEshkol).map(([key, settlements]) => (
                                             <>
                                                 <Group gap={6}>
@@ -258,7 +258,7 @@ const NewPlan = () => {
                                             {evacPlanStore.isAnyHotelOfHotelsSelected(staticDataStore.hotelsWithRooms) ? 'בטל הכל' : 'בחר הכל'}
                                         </Button>
                                     </Group>
-                                    <Stack className='max-h-[300px] overflow-y-auto'>
+                                    <Stack className='max-h-[250px] overflow-y-auto'>
                                         {sortEntriesByCity(Object.entries(staticDataStore.hotelsWithRoomsMapByCity)).map(([city, hotels]) => (
                                             <Stack>
                                                 <Group gap={6}>
@@ -308,9 +308,9 @@ const NewPlan = () => {
                         </Accordion>
                     </Stack>
                 </Stack>
-                <Stack w={400} h='100%' p='0'>
+                {/* <Stack w={400} h='100%' p='0'>
                     <MapComponent />
-                </Stack>
+                </Stack> */}
             </Group>
             <Group className='bg-white p-4' justify='space-between'>
                 <Group align='center'>

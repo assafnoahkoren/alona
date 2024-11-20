@@ -1,3 +1,4 @@
+import { Settlements_To_Evacuate } from '@prisma/client';
 import {makeAutoObservable, runInAction} from 'mobx';
 import apiService from '../services/apiService';
 import {EnrichedHotel} from '../../../server/routers/models/hotelRoutes';
@@ -41,7 +42,8 @@ export class StaticDataStore {
                 }).filter(id => id !== null) as number[];
                 this.hotels = hotelsResponse;
                 this.settlements = settlementsResponse;
-                this.evacuationData = evacuationDataResponse;
+                const SettlementsSigns = settlementsResponse.map(row => row.Settlement_sign);
+                this.evacuationData = evacuationDataResponse.filter(row => SettlementsSigns.includes(row.yishuvNumber.toString()));
                 this.isLoading = false;
             });
         } catch (error) {
