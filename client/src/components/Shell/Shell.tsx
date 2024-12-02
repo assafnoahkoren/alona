@@ -11,7 +11,7 @@ export function Shell() {
     <AppShell
       className='bg-[#F5F5F5]'
       withBorder={false}
-      header={{ height: 60 }}
+      header={{ height: 0 }}
       navbar={{
         width: 200,
         breakpoint: 'none',
@@ -19,25 +19,25 @@ export function Shell() {
       }}
       padding="0"
     >
-      <AppShell.Header className='flex items-center justify-center color-white' style={{ background: 'linear-gradient(to right, rgba(2,95,219,1) 0%, rgba(2,95,219,1) 35%, rgba(11,54,104,1) 100%)' }}>
+      {/* <AppShell.Header className='flex items-center justify-center color-white' style={{ background: 'linear-gradient(to right, rgba(2,95,219,1) 0%, rgba(2,95,219,1) 35%, rgba(11,54,104,1) 100%)' }}>
         <Title order={5}>מערכת שיבוץ מלונות</Title>
-      </AppShell.Header>
+      </AppShell.Header> */}
 
       <AppShell.Navbar p={0} >
         <div className='flex items-start justify-end p-2'>
           <Hamburger toggled={opened} toggle={setOpen} size={48} />
         </div>
         <Stack gap={0}>
-          <NavItem label='מסך בית' icon={<IconHome />} url="/" />
-          <NavItem label='מעקב פינוי בפועל' icon={<IconPlayerPlay />} url="/tracking" />
+          {/* <NavItem label='מסך בית' icon={<IconHome />} url="/" /> */}
+          {/* <NavItem label='מעקב פינוי בפועל' icon={<IconPlayerPlay />} url="/tracking" /> */}
           <NavItem label='יצירת תוכנית חדשה' icon={<IconFilePlus />} url="/new-plan" />
-          <NavItem label='טיוטות פרסום' icon={<IconDeviceFloppy />} url="/drafts" />
-          <NavItem label='היסטוריה' icon={<IconArchive />} url="/history" />
+          {/* <NavItem label='טיוטות פרסום' icon={<IconDeviceFloppy />} url="/drafts" /> */}
+          {/* <NavItem label='היסטוריה' icon={<IconArchive />} url="/history" /> */}
           <Divider className='my-6' />
 
-          <Title order={6} className='px-5'>מסכי שליטה</Title>
-          <NavItem label='הערכת חדרי מלון נדרשים לפינוי ' icon={<IconCar />} url="/room-estimation" />
-          <NavItem label='בתי מלון ' icon={<IconLuggage />} url="/hotels" />
+          {/* <Title order={6} className='px-5'>מסכי שליטה</Title> */}
+          {/* <NavItem label='הערכת חדרי מלון נדרשים לפינוי ' icon={<IconCar />} url="/room-estimation" /> */}
+          {/* <NavItem label='בתי מלון ' icon={<IconLuggage />} url="/hotels" /> */}
         </Stack>
       </AppShell.Navbar>
 

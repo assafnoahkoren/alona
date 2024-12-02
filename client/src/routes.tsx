@@ -18,10 +18,10 @@ const AppRoutes = () => (
     <Route
       element={isAuthenticated() ? <Shell /> : <Navigate to="/login" replace />}
     >
-      <Route path="/" element={<Home />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/new-plan" element={<NewPlan />} />
+      <Route path="*" element={<Navigate to="/new-plan" replace />} />
     </Route>
 
     {/* Catch-all route */}

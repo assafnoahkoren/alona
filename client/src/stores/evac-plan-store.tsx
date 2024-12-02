@@ -6,6 +6,8 @@ import { staticDataStore } from "./static-data-store";
 import algorithmRunService from "../services/algorithmRunService";
 import { EvacuationDataResponse } from "../../../server/routers/models/evacuationDataRoutes";
 import { EnrichedHotel } from "../../../server/routers/models/hotelRoutes";
+import { modals } from '@mantine/modals';
+import { Stack, Text } from "@mantine/core";
 
 type AlgorithmRunId = string;
 type Results = {
@@ -43,7 +45,7 @@ class EvacPlanStore {
 
     return Math.ceil(
       population * (this.requiredRoomsPopulationPercentage / 100) /
-        this.fitInRoom,
+      this.fitInRoom,
     );
   }
   async createEvacPlan() {
@@ -60,13 +62,19 @@ class EvacPlanStore {
           Settlement_sign: row.evacData?.yishuvNumber,
           rooms_needed: this.getRoomsNeededForEvacuation(row.evacData),
         })),
+        parameters: this.mode === 'dynamic' ? {
+          fitInRoom: this.fitInRoom,
+          requiredRoomsPopulationPercentage: this.requiredRoomsPopulationPercentage,
+          mode: this.mode,
+        } : {
+          mode: this.mode,
+        },
       }),
     });
     this.algorithmRuns[algorithmRun.ID] = {
       allocations: [],
       algorithmRun,
     };
-    showToast(`הרצה מס' ${algorithmRun.ID} נוצרה בהצלחה`);
     const totalRoomsAllocated = Object.values(result.allocations).reduce(
       (acc, allocation) => {
         return acc +
@@ -83,8 +91,27 @@ class EvacPlanStore {
       },
       0,
     );
-    showToast(`שורינו ${totalRoomsAllocated} חדרים`);
-    showToast(`נותרו ${totalRoomsUnallocated} חדרים`);
+
+    modals.openConfirmModal({
+      title: (
+        <Text>
+          הרצה מס' {algorithmRun.ID} נוצרה בהצלחה.
+        </Text>
+      ),
+      children: (
+        <Stack>
+          <Text>
+            נותרו {totalRoomsUnallocated} חדרים
+          </Text>
+          <Text>
+            שורינו {totalRoomsAllocated} חדרים
+          </Text>
+        </Stack>
+      ),
+      labels: { confirm: 'עבור למערכת ה-BI', cancel: 'סגור' },
+      onCancel: () => console.log('סגור'),
+      onConfirm: () => console.log('עבור למערכת ה-BI'),
+    });
 
     return algorithmRun;
   }

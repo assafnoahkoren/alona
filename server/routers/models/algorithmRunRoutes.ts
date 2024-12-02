@@ -33,15 +33,23 @@ router.get('/', async (_req: Request, res: Response<Algorithm_Run[]>) => {
 type Parameters = {
   hotels?: EnrichedHotel[];
   settlement?: EnrichedSettlement[];
+  parameters?: {
+    fitInRoom: boolean;
+    requiredRoomsPopulationPercentage: number;
+    mode: 'static' | 'dynamic';
+  };
 }
 
 router.post('/', async (req: Request<{}, {}, CreateAlgorithmRunDto>, res: Response) => {
   try {
     await prisma.allocations.deleteMany();
-    const newRun = await prisma.algorithm_Run.create({
-      data: {}
-    });
     const parameters: Parameters = JSON.parse(req.body.parameters || '{}');
+
+    const newRun = await prisma.algorithm_Run.create({
+      data: {
+        parameters: JSON.stringify(parameters.parameters)
+      }
+    });
     const result = await algorithmService.runAllocation({
       hotels: parameters.hotels || [],
       settlements: parameters.settlement || [],

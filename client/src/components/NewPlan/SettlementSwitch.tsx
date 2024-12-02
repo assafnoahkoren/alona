@@ -1,7 +1,7 @@
 import { Switch } from "@mantine/core";
 import { Box } from "@mantine/core";
 import { observer } from "mobx-react-lite";
-import { evacPlanStore } from "../../stores/evac-plan-store.ts";
+import { evacPlanStore } from "../../stores/evac-plan-store.tsx";
 import { EvacuationDataResponse } from "../../../../server/routers/models/evacuationDataRoutes.ts";
 
 const SettlementSwitch = ({ settlement }: { settlement: EvacuationDataResponse }) => {
