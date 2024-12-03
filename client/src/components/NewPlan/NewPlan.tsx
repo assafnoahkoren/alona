@@ -44,6 +44,13 @@ import SettlementSwitch from './SettlementSwitch.tsx';
 import { Tabs } from '@mantine/core';
 
 const NewPlan = () => {
+    const [activeTab, setActiveTab] = useState<string | null>('settlements');
+
+    useEffect(() => {
+        if (activeTab === 'settings' && evacPlanStore.mode === 'static') {
+            setActiveTab('settlements');
+        }
+    }, [evacPlanStore.mode]);
 
     useEffect(() => {
         if (!staticDataStore.initialized)
@@ -89,7 +96,7 @@ const NewPlan = () => {
                                 <Box
                                     className={`border-2 border-blue-500 px-2 pb-1 fw-700 cursor-pointer ${evacPlanStore.mode === 'static' ? 'border-b-solid' : ''}`}
                                     onClick={() => evacPlanStore.mode = 'static'}>
-                                    על פי מאפני אוכלוסיה
+                                    על פי מאפייני אוכלוסיה
                                 </Box>
                                 <Box
                                     className={`border-2 border-blue-500 px-2 pb-1 fw-700 cursor-pointer ${evacPlanStore.mode === 'dynamic' ? 'border-b-solid' : ''}`}
@@ -98,7 +105,7 @@ const NewPlan = () => {
                                 </Box>
                             </Group>
                         </Card>
-                        <Tabs defaultValue="settlements" className='h-full flex-col'>
+                        <Tabs value={activeTab} onChange={setActiveTab} className='h-full flex-col'>
                             <Tabs.List>
                                 { evacPlanStore.mode === 'dynamic' && <Tabs.Tab value="settings" leftSection={<IconPercentage size={40} />}>
                                     משתנים דינמים
@@ -143,7 +150,7 @@ const NewPlan = () => {
                                 </Tabs.Tab>
                             </Tabs.List>
 
-                            <Tabs.Panel value="settings">
+                            { evacPlanStore.mode === 'dynamic' && <Tabs.Panel value="settings">
                                 <Group className='w-full mt-4'>
                                     <Stack gap={4}>
                                         <Group justify='space-between'>
@@ -190,7 +197,7 @@ const NewPlan = () => {
                                     </Stack>
 
                                 </Group>
-                            </Tabs.Panel>
+                            </Tabs.Panel>}
 
                             <Tabs.Panel value="settlements">
                                 <Group className='py-4'>

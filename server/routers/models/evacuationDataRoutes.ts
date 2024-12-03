@@ -19,7 +19,7 @@ router.get('/', async (_req: Request, res: Response<EvacuationDataResponse[]>) =
       select: {
         Yishuv_Name: true,
         Yishuv_Number: true,
-        Population_Regular_21_7: true,
+        Population_Remaining_Estimate_16_7: true,
         Total_Estimated_Rooms_For_Eligible_Residents_Excluding_Remaining: true,
         Eshkol: true,
         Merhav: true,
@@ -29,7 +29,7 @@ router.get('/', async (_req: Request, res: Response<EvacuationDataResponse[]>) =
     const data =  evacuationData.map((item) => ({
         yishuvName: item.Yishuv_Name,
         yishuvNumber: item.Yishuv_Number,
-        population: item.Population_Regular_21_7,
+        population: item.Population_Remaining_Estimate_16_7,
         would_need_room_estimated: item.Total_Estimated_Rooms_For_Eligible_Residents_Excluding_Remaining,
         Eshkol: item.Eshkol,
         Merhav: item.Merhav,

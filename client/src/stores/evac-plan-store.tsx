@@ -66,8 +66,14 @@ class EvacPlanStore {
           fitInRoom: this.fitInRoom,
           requiredRoomsPopulationPercentage: this.requiredRoomsPopulationPercentage,
           mode: this.mode,
+          creationDate: new Date().toISOString(),
+          createTime: new Date().getTime(),
         } : {
           mode: this.mode,
+          creationDate: new Date().toISOString(),
+          createTime: new Date().getTime(),
+          fitInRoom: null,
+          requiredRoomsPopulationPercentage: null,
         },
       }),
     });
@@ -110,7 +116,9 @@ class EvacPlanStore {
       ),
       labels: { confirm: 'עבור למערכת ה-BI', cancel: 'סגור' },
       onCancel: () => console.log('סגור'),
-      onConfirm: () => console.log('עבור למערכת ה-BI'),
+      onConfirm: () => {
+        window.open('https://sqlbi2019.mot.gov.il/reports_pbi/powerbi/IDF/QA/SafeDistanceV3_May_2022', '_blank');
+      },
     });
 
     return algorithmRun;
