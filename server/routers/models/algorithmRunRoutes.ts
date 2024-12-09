@@ -56,10 +56,17 @@ router.post('/', async (req: Request<{}, {}, CreateAlgorithmRunDto>, res: Respon
       personsInRooms: 4,
       algorithmRun: newRun,
     });
+    let execResult = null;
+    if (process.env.EXEC_SP === 'true') {
+      execResult = await prisma.$executeRawUnsafe(`EXEC msdb.dbo.SP_Refresh_REPORT`)
+    }
+  
     res.status(201).json({
       algorithmRun: newRun,
       result: result,
+      execResult: execResult
     });
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to create algorithm run' });
