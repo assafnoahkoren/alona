@@ -1,6 +1,8 @@
 # Use the Node.js 20 image as the base image
 FROM node:20-alpine
 
+RUN apk add --no-cache openssl
+
 # Set the working directory inside the container
 WORKDIR /usr/src/app
 
