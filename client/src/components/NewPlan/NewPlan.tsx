@@ -44,11 +44,14 @@ import SettlementSwitch from './SettlementSwitch.tsx';
 import { Tabs } from '@mantine/core';
 
 const NewPlan = () => {
-    const [activeTab, setActiveTab] = useState<string | null>('settlements');
+    const [activeTab, setActiveTab] = useState<'settlements' | 'hotels' | 'settings' | null>('settlements');
 
     useEffect(() => {
         if (activeTab === 'settings' && evacPlanStore.mode === 'static') {
             setActiveTab('settlements');
+        }
+        if (evacPlanStore.mode === 'dynamic') {
+            setActiveTab('settings');
         }
     }, [evacPlanStore.mode]);
 
@@ -107,11 +110,11 @@ const NewPlan = () => {
                         </Card>
                         <Tabs value={activeTab} onChange={setActiveTab} className='h-full flex-col'>
                             <Tabs.List>
-                                { evacPlanStore.mode === 'dynamic' && <Tabs.Tab value="settings" leftSection={<IconPercentage size={40} />}>
-                                    משתנים דינמים
+                                { evacPlanStore.mode === 'dynamic' && <Tabs.Tab value="settings" className={activeTab === 'settings' ? 'bg-blue-300' : ''} leftSection={<IconPercentage size={40} />}>
+                                הגדרת משתנים דינמים
                                 </Tabs.Tab>}
-                                <Tabs.Tab value="settlements" leftSection={<IconHome size={40} />}>
-                                    ישובים לפינוי
+                                <Tabs.Tab value="settlements" className={activeTab === 'settlements' ? 'bg-blue-300' : ''} leftSection={<IconHome size={40} />}>
+                                הגדרת ישובים לפינוי
                                     <Group gap={4}>
                                         <Text>
                                             כל היישובים
@@ -134,8 +137,9 @@ const NewPlan = () => {
                                         </Text>
                                     </Group>
                                 </Tabs.Tab>
-                                <Tabs.Tab value="hotels" leftSection={<IconBuildings size={40} />}>
-                                    יעדי קליטה
+                                <Tabs.Tab value="hotels" className={activeTab === 'hotels' ? 'bg-blue-300' : ''}
+                                    leftSection={<IconBuildings size={40} />}>
+                                הגדרת יעדי קליטה
                                     <Group gap={4}>
                                         <Text>
                                             כל היעדים
@@ -145,6 +149,16 @@ const NewPlan = () => {
                                         </Text>
                                         <Text>
                                             {staticDataStore.hotelsWithRooms.length}
+                                        </Text>
+                                        <Space w={16} />
+                                        <Text>
+                                            מיועדים להתפנות
+                                        </Text>
+                                        <Text>
+                                            •
+                                        </Text>
+                                        <Text>
+                                            {evacPlanStore.getHotelsForAcceptance().length}
                                         </Text>
                                     </Group>
                                 </Tabs.Tab>
@@ -272,10 +286,12 @@ const NewPlan = () => {
                                                                 </Tooltip> : null
                                                             ))}
                                                         </Group>
-                                                        <Group justify='center' className='absolute left-0 top-0 w-full '>
-                                                            <Switch className='relative -translate-y-1/2'
+                                                        <Group justify='center' className='absolute left-0 top-0 w-full cursor-pointer' onClick={() => evacPlanStore.toggle_markedForAcceptance(hotel.Hotel_ID)}>
+                                                            <Switch className='relative -translate-y-1/2 cursor-pointer'
                                                                 checked={evacPlanStore.getHotelData(hotel.Hotel_ID).markedForAcceptance}
                                                                 onChange={(event) => evacPlanStore.set_markedForAcceptance(hotel.Hotel_ID, event.currentTarget.checked)}
+                                                                
+
                                                             />
                                                         </Group>
                                                     </Card>
@@ -295,7 +311,7 @@ const NewPlan = () => {
                     <MapComponent />
                 </Stack> */}
             </Group>
-            <Group className='bg-white p-4' justify='space-between'>
+            <Group className='bg-white p-4 position-fixed bottom-0 left-0 w-full z-101' justify='space-between'>
                 <Group align='center'>
                     <Title order={5}>
                         חדרים זמינים: {evacPlanStore.getTotalAvailableRooms().toLocaleString()}
