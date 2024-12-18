@@ -142,3 +142,13 @@ model TBL_evacuation_data {
   @@map("TBL_evacuation_data")
   @@schema("dbo")
 }
+
+model User {
+  ID                      Int                       @id @default(autoincrement())
+  email                   String
+  password                String
+  isAdmin                 Boolean?
+
+  @@map("User")
+  @@schema("dbo")
+}

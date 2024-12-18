@@ -1,15 +1,26 @@
 import React, { useState } from 'react';
-import { AppShell, Divider, Group, Stack, Text, Title } from '@mantine/core';
+import { AppShell, Button, Divider, Group, Stack, Text, Title } from '@mantine/core';
 import { Outlet, useNavigate, useLocation } from 'react-router-dom';
-import { Squash as Hamburger } from 'hamburger-react'
-import { IconArchive, IconCar, IconDeviceFloppy, IconFilePlus, IconHome, IconLuggage, IconPlayerPlay } from '@tabler/icons-react';
+import { Squash as Hamburger } from 'hamburger-react';
+import {
+  IconArchive,
+  IconCar,
+  IconDeviceFloppy,
+  IconFilePlus,
+  IconHome,
+  IconLuggage,
+  IconPlayerPlay,
+  IconUsers,
+} from '@tabler/icons-react';
+import { useAuth } from '../../infra/auth-provider.tsx';
 
 export function Shell() {
-  const [opened, setOpen] = useState(false)
+  const [opened, setOpen] = useState(false);
+  const { user, logout } = useAuth();
 
   return (
     <AppShell
-      className='bg-[#F5F5F5]'
+      className="bg-[#F5F5F5]"
       withBorder={false}
       header={{ height: 0 }}
       navbar={{
@@ -23,25 +34,29 @@ export function Shell() {
         <Title order={5}>מערכת שיבוץ מלונות</Title>
       </AppShell.Header> */}
 
-      <AppShell.Navbar p={0} >
-        <div className='flex items-start justify-end p-2'>
+      <AppShell.Navbar p={0}>
+        <div className="flex items-start justify-end p-2">
           <Hamburger toggled={opened} toggle={setOpen} size={48} />
         </div>
         <Stack gap={0}>
           {/* <NavItem label='מסך בית' icon={<IconHome />} url="/" /> */}
           {/* <NavItem label='מעקב פינוי בפועל' icon={<IconPlayerPlay />} url="/tracking" /> */}
-          <NavItem label='יצירת תוכנית חדשה' icon={<IconFilePlus />} url="/new-plan" />
+          <NavItem label="יצירת תוכנית חדשה" icon={<IconFilePlus />} url="/new-plan" />
           {/* <NavItem label='טיוטות פרסום' icon={<IconDeviceFloppy />} url="/drafts" /> */}
           {/* <NavItem label='היסטוריה' icon={<IconArchive />} url="/history" /> */}
-          <Divider className='my-6' />
+          <Divider className="my-6" />
 
           {/* <Title order={6} className='px-5'>מסכי שליטה</Title> */}
           {/* <NavItem label='הערכת חדרי מלון נדרשים לפינוי ' icon={<IconCar />} url="/room-estimation" /> */}
           {/* <NavItem label='בתי מלון ' icon={<IconLuggage />} url="/hotels" /> */}
+          {user?.isAdmin && <NavItem label="ניהול משתמשים" icon={<IconUsers />} url="/admin" />}
+          <Button fullWidth mt="sm" variant="outline" color="red" onClick={() => logout()}>
+            התנתקות
+          </Button>
         </Stack>
       </AppShell.Navbar>
 
-      <AppShell.Main className='flex'>
+      <AppShell.Main className="flex">
         <Outlet />
       </AppShell.Main>
     </AppShell>
@@ -49,15 +64,15 @@ export function Shell() {
 }
 
 type NavItemProps = {
-  label: string,
-  icon: React.ReactNode,
-  url: string,
-}
+  label: string;
+  icon: React.ReactNode;
+  url: string;
+};
 const NavItem = (props: NavItemProps) => {
   const navigate = useNavigate();
   const location = useLocation();
   const isActive = location.pathname === props.url;
-  
+
   let itemClassName = 'color-[#687E97] p-[6px] cursor-pointer hover:bg-blue-100 hover:bg-opacity-50';
   let iconClassName = 'color-[#C3CFE7]';
   if (isActive) {
@@ -65,13 +80,13 @@ const NavItem = (props: NavItemProps) => {
     iconClassName = `${iconClassName} color-blue-600`;
   }
 
-  return <Group className={itemClassName} gap={8} onClick={() => navigate(props.url)}>
-    <div className={`flex-[1] flex items-center justify-end ${iconClassName}`}>
-      {props.icon}
-    </div>
+  return (
+    <Group className={itemClassName} gap={8} onClick={() => navigate(props.url)}>
+      <div className={`flex-[1] flex items-center justify-end ${iconClassName}`}>{props.icon}</div>
 
-    <Text className="flex-[5] flex items-center justify-start overflow-hidden text-ellipsis whitespace-nowrap">
-      {props.label}
-    </Text>
-  </Group>
-}
+      <Text className="flex-[5] flex items-center justify-start overflow-hidden text-ellipsis whitespace-nowrap">
+        {props.label}
+      </Text>
+    </Group>
+  );
+};
